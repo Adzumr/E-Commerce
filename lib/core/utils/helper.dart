@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../models/welcome_model.dart';
+import '../../data/models/welcome_model.dart';
 import 'app_assets.dart';
-import 'app_constants.dart';
 
 class Helper {
   static Color green = const Color(0xFF198155);

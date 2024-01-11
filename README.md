@@ -71,21 +71,6 @@ flutter pub get
 flutter run
 ```
 
-## Project Structure
-
-```
-|-- lib
-|   |-- screens
-|       |-- product_listing_screen.dart
-|       |-- product_detail_screen.dart
-|       |-- user_registration_screen.dart
-|       |-- user_login_screen.dart
-|       |-- favorites_screen.dart
-|       |-- profile_screen.dart
-|-- pubspec.yaml
-|-- README.md
-```
-
 ## Dependencies
 
 - [Flutter](https://flutter.dev/): UI toolkit for building natively compiled applications.

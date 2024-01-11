@@ -1,4 +1,9 @@
+import 'package:commerce_app/core/utils/extentions.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../core/route_config/route_names.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -8,19 +13,149 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool? isVisible = true;
+
+  final formKey = GlobalKey<FormState>();
+  final emailAddressController = TextEditingController();
+  final passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Scaffold(
-      backgroundColor: theme.colorScheme.background,
-      body: const SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(25),
-          child: Center(
-            child: Text("Login Screen"),
+
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+          backgroundColor: theme.colorScheme.background,
+          appBar: AppBar(
+            title: const Text(
+              "Log in",
+            ),
+            titleTextStyle: theme.textTheme.titleLarge,
+            centerTitle: true,
+            backgroundColor: theme.colorScheme.background,
           ),
-        ),
-      ),
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Form(
+                key: formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // const AppLogo(),
+                      const SizedBox(height: 48),
+                      TextFormField(
+                        controller: emailAddressController,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value!.trim().isEmpty) {
+                            return "Enter Email Address";
+                          }
+                          if (!value.trim().isEmail()) {
+                            return "Invalid email";
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          labelText: "Email Address",
+                          prefixIcon: Icon(
+                            Icons.email_outlined,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        obscureText: isVisible!,
+                        controller: passwordController,
+                        keyboardType: TextInputType.visiblePassword,
+                        validator: (value) {
+                          if (value!.trim().isEmpty) {
+                            return "Enter Password";
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: "Password",
+                          prefixIcon: const Icon(
+                            Icons.lock_outline,
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                if (isVisible!) {
+                                  isVisible = false;
+                                } else {
+                                  isVisible = true;
+                                }
+                              });
+                            },
+                            icon: Icon(
+                              isVisible!
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                              color: theme.colorScheme.primary,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      const SizedBox(height: 16),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: InkWell(
+                          onTap: () {
+                            // context.pushNamed(AppRouteNames.login);
+                          },
+                          child: Text(
+                            "Forgot password?",
+                            style: theme.textTheme.bodyLarge!.copyWith(
+                              color: theme.colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton(
+                        onPressed: () async {
+                          context.dissmissKeyboard();
+                          if (formKey.currentState!.validate()) {}
+                        },
+                        child: const Text(
+                          "Log in",
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: "Don't have an account? ",
+                              style: theme.textTheme.bodyMedium,
+                            ),
+                            TextSpan(
+                              text: 'Sign Up',
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  context.pushNamed(AppRouteNames.signup);
+                                },
+                              style: theme.textTheme.bodyMedium!.copyWith(
+                                color: theme.colorScheme.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          )),
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:e_commerce/core/utils/extentions.dart';
+import 'package:commerce_app/core/utils/extentions.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -36,42 +36,40 @@ class IntroductionScreen extends StatelessWidget {
                           right: 25,
                           bottom: 50,
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Image(
-                                  image: AssetImage(
-                                      Helper.introductionMessges[index].image!),
-                                  height:
-                                      context.deviceSize.flipped.aspectRatio *
-                                          150,
-                                ),
-                              ],
-                            ),
-                            const SizedBox.shrink(),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  Helper.introductionMessges[index].title!,
-                                  textAlign: TextAlign.center,
-                                  style:
-                                      Theme.of(context).textTheme.headlineLarge,
-                                ),
-                                const SizedBox(height: 20),
-                                Text(
-                                  Helper.introductionMessges[index].subtitle!,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.bodyLarge!,
-                                ),
-                              ],
-                            ),
-                            const SizedBox.shrink(),
-                          ],
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Image(
+                                image: AssetImage(
+                                    Helper.introductionMessges[index].image!),
+                                height: context.deviceSize.flipped.aspectRatio *
+                                    150,
+                              ),
+                              const SizedBox.shrink(),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    Helper.introductionMessges[index].title!,
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineLarge,
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Text(
+                                    Helper.introductionMessges[index].subtitle!,
+                                    textAlign: TextAlign.center,
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge!,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox.shrink(),
+                            ],
+                          ),
                         ),
                       );
                     },

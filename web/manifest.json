@@ -1,6 +1,6 @@
 {
-    "name": "e_commerce",
-    "short_name": "e_commerce",
+    "name": "commerce_app",
+    "short_name": "commerce_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
