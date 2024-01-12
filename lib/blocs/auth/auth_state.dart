@@ -7,9 +7,21 @@ final class AuthInitial extends AuthState {}
 
 final class AuthLoading extends AuthState {}
 
-final class LoginSuccess extends AuthState {}
+final class LoginSuccess extends AuthState {
+  final User? user;
 
-final class SignupSuccess extends AuthState {}
+  LoginSuccess({
+    required this.user,
+  });
+}
+
+final class SignupSuccess extends AuthState {
+  final User? user;
+
+  SignupSuccess({
+    required this.user,
+  });
+}
 
 final class LoginFailure extends AuthState {
   final String? error;

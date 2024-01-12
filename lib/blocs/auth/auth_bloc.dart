@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,12 +15,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoginEvent>((event, emit) async {
       emit(AuthLoading());
       try {
-        await authRepository!.login(
+        final user = await authRepository!.login(
           emailAddress: event.emailAddress,
           password: event.password,
         );
         emit(
-          LoginSuccess(),
+          LoginSuccess(user: user),
         );
       } catch (e) {
         emit(
@@ -32,12 +33,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignupEvent>((event, emit) async {
       emit(AuthLoading());
       try {
-        await authRepository!.signup(
+        final user = await authRepository!.signup(
           emailAddress: event.emailAddress,
           password: event.password,
         );
         emit(
-          SignupSuccess(),
+          SignupSuccess(user: user),
         );
       } catch (e) {
         emit(
