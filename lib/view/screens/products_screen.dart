@@ -1,8 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:commerce_app/controllers/controller/product_controller.dart';
-import 'package:commerce_app/core/route_config/route_names.dart';
-import 'package:commerce_app/core/utils/extentions.dart';
-import 'package:commerce_app/data/models/products_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

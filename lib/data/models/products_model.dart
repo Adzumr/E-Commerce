@@ -1,5 +1,5 @@
 class Product {
-  final num? id;
+  num? id;
   final String? title;
   final num? price;
   final String? description;

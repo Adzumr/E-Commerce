@@ -1,14 +1,19 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
 
 import 'package:http/http.dart' as http;
 import '../../data/models/products_model.dart';
 
 class ProductController extends GetxController {
+  User? user = FirebaseAuth.instance.currentUser;
+
+  final _sellsCollection = FirebaseFirestore.instance.collection('favorites');
   List<Product>? products;
-  List<Product>? favorites;
+  final RxList<Product> favorites = <Product>[].obs;
   Future<List<Product>> fetchProducts() async {
     try {
       final response = await http.get(
@@ -34,21 +39,50 @@ class ProductController extends GetxController {
     }
   }
 
-  addFavorite(Product? product) {
-    if (favorites!.isEmpty) {
-      favorites!.add(product!);
-      debugPrint("Favorites: $product");
-    }
-    if (!favorites!.contains(product)) {
-      favorites!.add(product!);
-      debugPrint("Favorites: ${favorites!.length}");
+  Future addProduct({
+    Product? productModel,
+  }) async {
+    try {
+      DocumentReference documentRef =
+          _sellsCollection.doc(user!.uid).collection("product").doc();
+      String productId = documentRef.id;
+      productModel!.id = productId;
+
+      await documentRef
+          .set(
+            productModel.toJson(),
+          )
+          .then(
+            (value) async => getProductsStream(),
+          );
+    } on FirebaseException catch (e) {
+      exceptionError(
+        exception: e,
+      );
     }
   }
 
+  Stream<List<ProductModel>> getProductsStream() {
+    return _productsCollection
+        .doc(user!.uid)
+        .collection("product")
+        .snapshots()
+        .map((querySnapshot) {
+      List<ProductModel> products = [];
+      for (var documentSnapshot in querySnapshot.docs) {
+        ProductModel productModel =
+            ProductModel.fromJson(documentSnapshot.data());
+        productModel.id = documentSnapshot.id;
+        products.add(productModel);
+      }
+      return products;
+    });
+  }
+
   removeFavorite(Product? product) {
-    if (favorites!.contains(product)) {
-      favorites!.remove(product!);
-      debugPrint("Favorites: ${favorites!.length}");
+    if (favorites.contains(product)) {
+      favorites.remove(product!);
+      debugPrint("Favorites: ${favorites.length}");
     }
   }
 }

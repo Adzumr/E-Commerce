@@ -3,7 +3,6 @@ import 'package:commerce_app/core/utils/extentions.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import '../../core/route_config/route_names.dart';
 
 class LoginScreen extends StatefulWidget {

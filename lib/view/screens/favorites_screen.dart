@@ -11,12 +11,6 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  @override
-  void initState() {
-    productController.favorites;
-    super.initState();
-  }
-
   final productController = Get.find<ProductController>();
   @override
   Widget build(BuildContext context) {
@@ -35,15 +29,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 textAlign: TextAlign.center,
                 style: theme.textTheme.titleLarge,
               ),
-              productController.favorites!.isEmpty
+              productController.favorites.isEmpty
                   ? const Center(
                       child: Text("No Favorite"),
                     )
                   : Expanded(
                       child: ListView.builder(
-                        itemCount: productController.favorites!.length,
+                        itemCount: productController.favorites.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final product = productController.favorites![index];
+                          final product = productController.favorites[index];
                           return ProducWidget(
                             product: product,
                             onPressed: () {
