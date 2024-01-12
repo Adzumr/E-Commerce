@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../main.dart';
+import '../../view/screens/home_screen.dart';
 import '../../view/screens/intro_screen.dart';
 import '../../view/screens/login_screen.dart';
 import '../../view/screens/signup_screen.dart';
@@ -37,6 +38,11 @@ class AppRoutesConfiguration {
       path: '/${AppRouteNames.signup}',
       name: AppRouteNames.signup,
       builder: (context, state) => const SignupScreen(),
+    ),
+    GoRoute(
+      path: '/${AppRouteNames.home}',
+      name: AppRouteNames.home,
+      builder: (context, state) => const HomeScreen(),
     ),
   ];
 }

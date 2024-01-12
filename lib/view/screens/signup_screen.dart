@@ -106,7 +106,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       BlocConsumer<AuthBloc, AuthState>(
                         listener: (context, state) {
                           if (state is SignupSuccess) {
-                            debugPrint("Sign Up Success");
+                            context.pushNamed(AppRouteNames.home);
                           }
                         },
                         builder: (context, state) {
