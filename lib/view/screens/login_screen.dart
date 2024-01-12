@@ -1,10 +1,9 @@
+import 'package:commerce_app/controllers/controller/auth_controller.dart';
 import 'package:commerce_app/core/utils/extentions.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../blocs/auth/auth_bloc.dart';
 import '../../core/route_config/route_names.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,6 +15,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool? isVisible = true;
+  bool? isLoading = false;
+
+  final authController = Get.find<AuthenticationController>();
 
   final formKey = GlobalKey<FormState>();
   final emailAddressController = TextEditingController();
@@ -27,160 +29,157 @@ class _LoginScreenState extends State<LoginScreen> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-          backgroundColor: theme.colorScheme.background,
-          appBar: AppBar(
-            title: const Text(
-              "Log in",
-            ),
-            titleTextStyle: theme.textTheme.titleLarge,
-            centerTitle: true,
-            backgroundColor: theme.colorScheme.background,
+        backgroundColor: theme.colorScheme.background,
+        appBar: AppBar(
+          title: const Text(
+            "Log in",
           ),
-          body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Form(
-                key: formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      // const AppLogo(),
-                      const SizedBox(height: 48),
-                      TextFormField(
-                        controller: emailAddressController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value!.trim().isEmpty) {
-                            return "Enter Email Address";
-                          }
-                          if (!value.trim().isEmail()) {
-                            return "Invalid email";
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          labelText: "Email Address",
-                          prefixIcon: Icon(
-                            Icons.email_outlined,
-                          ),
+          titleTextStyle: theme.textTheme.titleLarge,
+          centerTitle: true,
+          backgroundColor: theme.colorScheme.background,
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Form(
+              key: formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // const AppLogo(),
+                    const SizedBox(height: 48),
+                    TextFormField(
+                      controller: emailAddressController,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value!.trim().isEmpty) {
+                          return "Enter Email Address";
+                        }
+                        if (!value.trim().isEmail) {
+                          return "Invalid email";
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: "Email Address",
+                        prefixIcon: Icon(
+                          Icons.email_outlined,
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      TextFormField(
-                        obscureText: isVisible!,
-                        controller: passwordController,
-                        keyboardType: TextInputType.visiblePassword,
-                        validator: (value) {
-                          if (value!.trim().isEmpty) {
-                            return "Enter Password";
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          labelText: "Password",
-                          prefixIcon: const Icon(
-                            Icons.lock_outline,
-                          ),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                if (isVisible!) {
-                                  isVisible = false;
-                                } else {
-                                  isVisible = true;
-                                }
-                              });
-                            },
-                            icon: Icon(
-                              isVisible!
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
-                              color: theme.colorScheme.primary,
-                            ),
-                          ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      obscureText: isVisible!,
+                      controller: passwordController,
+                      keyboardType: TextInputType.visiblePassword,
+                      validator: (value) {
+                        if (value!.trim().isEmpty) {
+                          return "Enter Password";
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: "Password",
+                        prefixIcon: const Icon(
+                          Icons.lock_outline,
                         ),
-                      ),
-                      const SizedBox(height: 16),
-
-                      const SizedBox(height: 16),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: InkWell(
-                          onTap: () {
-                            // context.pushNamed(AppRouteNames.login);
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              if (isVisible!) {
+                                isVisible = false;
+                              } else {
+                                isVisible = true;
+                              }
+                            });
                           },
-                          child: Text(
-                            "Forgot password?",
-                            style: theme.textTheme.bodyLarge!.copyWith(
-                              color: theme.colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          icon: Icon(
+                            isVisible!
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                            color: theme.colorScheme.primary,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 24),
-                      BlocConsumer<AuthBloc, AuthState>(
-                        listener: (context, state) {
-                          if (state is LoginSuccess) {
-                            context.pushNamed(AppRouteNames.home);
-                          }
+                    ),
+                    const SizedBox(height: 16),
+
+                    const SizedBox(height: 16),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: InkWell(
+                        onTap: () {
+                          // context.pushNamed(AppRouteNames.login);
                         },
-                        builder: (context, state) {
-                          return state is AuthLoading
-                              ? const Center(
-                                  child: CircularProgressIndicator.adaptive(),
-                                )
-                              : ElevatedButton(
-                                  onPressed: () async {
-                                    context.dissmissKeyboard();
-                                    if (formKey.currentState!.validate()) {
-                                      context.read<AuthBloc>().add(
-                                            LoginEvent(
-                                              emailAddress:
-                                                  emailAddressController.text
-                                                      .trim(),
-                                              password: passwordController.text
-                                                  .trim(),
-                                            ),
-                                          );
-                                    }
-                                  },
-                                  child: const Text(
-                                    "Log in",
-                                  ),
-                                );
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "Don't have an account? ",
-                              style: theme.textTheme.bodyMedium,
-                            ),
-                            TextSpan(
-                              text: 'Sign Up',
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  context.pushNamed(AppRouteNames.signup);
-                                },
-                              style: theme.textTheme.bodyMedium!.copyWith(
-                                color: theme.colorScheme.primary,
-                              ),
-                            ),
-                          ],
+                        child: Text(
+                          "Forgot password?",
+                          style: theme.textTheme.bodyLarge!.copyWith(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        textAlign: TextAlign.center,
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 24),
+                    isLoading!
+                        ? const Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          )
+                        : ElevatedButton(
+                            onPressed: () async {
+                              context.dissmissKeyboard();
+                              if (formKey.currentState!.validate()) {
+                                try {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  await authController.login(
+                                    emailAddress:
+                                        emailAddressController.text.trim(),
+                                    password: passwordController.text.trim(),
+                                  );
+                                } finally {
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                }
+                              }
+                            },
+                            child: const Text(
+                              "Log in",
+                            ),
+                          ),
+                    const SizedBox(height: 16),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Don't have an account? ",
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                          TextSpan(
+                            text: 'Sign Up',
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                context.pushNamed(AppRouteNames.signup);
+                              },
+                            style: theme.textTheme.bodyMedium!.copyWith(
+                              color: theme.colorScheme.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
               ),
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 }

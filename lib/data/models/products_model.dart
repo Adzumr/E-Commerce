@@ -1,13 +1,13 @@
-class Products {
-  final int? id;
+class Product {
+  final num? id;
   final String? title;
-  final double? price;
+  final num? price;
   final String? description;
   final String? category;
   final String? image;
   final Rating? rating;
 
-  Products({
+  Product({
     this.id,
     this.title,
     this.price,
@@ -17,10 +17,10 @@ class Products {
     this.rating,
   });
 
-  Products.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as int?,
+  Product.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as num?,
         title = json['title'] as String?,
-        price = json['price'] as double?,
+        price = json['price'] as num?,
         description = json['description'] as String?,
         category = json['category'] as String?,
         image = json['image'] as String?,
@@ -40,8 +40,8 @@ class Products {
 }
 
 class Rating {
-  final double? rate;
-  final int? count;
+  final num? rate;
+  final num? count;
 
   Rating({
     this.rate,
@@ -49,8 +49,8 @@ class Rating {
   });
 
   Rating.fromJson(Map<String, dynamic> json)
-      : rate = json['rate'] as double?,
-        count = json['count'] as int?;
+      : rate = json['rate'] as num?,
+        count = json['count'] as num?;
 
   Map<String, dynamic> toJson() => {'rate': rate, 'count': count};
 }

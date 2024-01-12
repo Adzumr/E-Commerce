@@ -1,6 +1,5 @@
 import 'package:commerce_app/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class AuthRepository {
   Future<User?> login({
@@ -17,7 +16,7 @@ class AuthRepository {
             const Duration(seconds: 30),
           );
       return response.user;
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
       throw Exception(
         e,
       );
@@ -38,7 +37,7 @@ class AuthRepository {
             const Duration(seconds: 30),
           );
       return response.user;
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
       throw Exception(
         e,
       );

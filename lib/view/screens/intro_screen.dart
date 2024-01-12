@@ -1,6 +1,6 @@
 import 'package:commerce_app/core/utils/extentions.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../core/route_config/route_names.dart';
@@ -112,12 +112,12 @@ class IntroductionScreen extends StatelessWidget {
                               Theme.of(context).colorScheme.primary,
                         ),
                         onPressed: () {
-                          context.pushNamed(AppRouteNames.signup).then(
-                                (value) => sharedPreferences!.setBool(
-                                  "skipIntro",
-                                  true,
-                                ),
-                              );
+                          Get.toNamed(AppRouteNames.signup)!.then(
+                            (value) => sharedPreferences!.setBool(
+                              "skipIntro",
+                              true,
+                            ),
+                          );
                         },
                         child: const Text(
                           "Sign Up",
@@ -132,10 +132,10 @@ class IntroductionScreen extends StatelessWidget {
                               Theme.of(context).colorScheme.primary,
                         ),
                         onPressed: () {
-                          context.pushNamed(AppRouteNames.login).then(
-                                (value) => sharedPreferences!
-                                    .setBool("skipIntro", true),
-                              );
+                          Get.toNamed(AppRouteNames.login)!.then(
+                            (value) =>
+                                sharedPreferences!.setBool("skipIntro", true),
+                          );
                         },
                         child: const Text(
                           "Login",

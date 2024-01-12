@@ -1,10 +1,10 @@
-import 'package:commerce_app/blocs/auth/auth_bloc.dart';
 import 'package:commerce_app/core/utils/extentions.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../controllers/controller/auth_controller.dart';
 import '../../core/route_config/route_names.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -16,6 +16,9 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   bool? isVisible = true;
+  bool? isLoading = false;
+
+  final authController = Get.find<AuthenticationController>();
 
   final formKey = GlobalKey<FormState>();
   final emailAddressController = TextEditingController();
@@ -55,7 +58,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           if (value!.trim().isEmpty) {
                             return "Enter Email Address";
                           }
-                          if (!value.trim().isEmail()) {
+                          if (!value.trim().isEmail) {
                             return "Invalid email";
                           }
                           return null;
@@ -103,38 +106,34 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      BlocConsumer<AuthBloc, AuthState>(
-                        listener: (context, state) {
-                          if (state is SignupSuccess) {
-                            context.pushNamed(AppRouteNames.home);
-                          }
-                        },
-                        builder: (context, state) {
-                          return state is AuthLoading
-                              ? const Center(
-                                  child: CircularProgressIndicator.adaptive(),
-                                )
-                              : ElevatedButton(
-                                  onPressed: () async {
-                                    context.dissmissKeyboard();
-                                    if (formKey.currentState!.validate()) {
-                                      context.read<AuthBloc>().add(
-                                            SignupEvent(
-                                              emailAddress:
-                                                  emailAddressController.text
-                                                      .trim(),
-                                              password: passwordController.text
-                                                  .trim(),
-                                            ),
-                                          );
-                                    }
-                                  },
-                                  child: const Text(
-                                    "Sign Up",
-                                  ),
-                                );
-                        },
-                      ),
+                      isLoading!
+                          ? const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            )
+                          : ElevatedButton(
+                              onPressed: () async {
+                                context.dissmissKeyboard();
+                                if (formKey.currentState!.validate()) {
+                                  try {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    await authController.signup(
+                                      emailAddress:
+                                          emailAddressController.text.trim(),
+                                      password: passwordController.text.trim(),
+                                    );
+                                  } finally {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  }
+                                }
+                              },
+                              child: const Text(
+                                "Sign Up",
+                              ),
+                            ),
                       const SizedBox(height: 16),
                       Text.rich(
                         TextSpan(
