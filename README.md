@@ -48,7 +48,7 @@ Welcome to the Immersive Commerce mobile app project! This app is designed to pr
 ### 9. Profile Management
 
 - Develop a profile screen.
-- Allow users to view and update their personal information, including name, email, and profile picture.
+- Allow users to view and update their personal information.
 
 ## Getting Started
 
