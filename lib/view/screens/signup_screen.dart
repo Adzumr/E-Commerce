@@ -31,14 +31,6 @@ class _SignupScreenState extends State<SignupScreen> {
       canPop: false,
       child: Scaffold(
           backgroundColor: theme.colorScheme.background,
-          appBar: AppBar(
-            title: const Text(
-              "Sign Up",
-            ),
-            titleTextStyle: theme.textTheme.titleLarge,
-            centerTitle: true,
-            backgroundColor: theme.colorScheme.background,
-          ),
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(20),
@@ -51,6 +43,17 @@ class _SignupScreenState extends State<SignupScreen> {
                     children: [
                       // const AppLogo(),
                       const SizedBox(height: 48),
+                      ListTile(
+                        title: Text(
+                          "Create Your Immersive Commerce Account:",
+                          style: theme.textTheme.titleLarge,
+                        ),
+                        subtitle: Text(
+                          "Unlock exclusive features and personalized recommendations by creating your account",
+                          style: theme.textTheme.bodyLarge,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
                       TextFormField(
                         controller: fullNameController,
                         keyboardType: TextInputType.name,

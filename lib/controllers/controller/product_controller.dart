@@ -11,7 +11,7 @@ import '../../data/models/products_model.dart';
 class ProductController extends GetxController {
   User? user = FirebaseAuth.instance.currentUser;
 
-  final _sellsCollection = FirebaseFirestore.instance.collection('favorites');
+  final _userCollection = FirebaseFirestore.instance.collection('user');
   List<Product>? products;
   final RxList<Product> favorites = <Product>[].obs;
   Future<List<Product>> fetchProducts() async {
@@ -39,22 +39,43 @@ class ProductController extends GetxController {
     }
   }
 
-  Future addProduct({
+  Future addFavorite({
     Product? productModel,
   }) async {
     try {
-      DocumentReference documentRef =
-          _sellsCollection.doc(user!.uid).collection("product").doc();
-      String productId = documentRef.id;
-      productModel!.id = productId;
+      // Check if the product is already added by querying the "favorites" collection
+      QuerySnapshot querySnapshot = await _userCollection
+          .doc(user!.uid)
+          .collection("favorites")
+          .where('title', isEqualTo: productModel!.title)
+          .get();
 
-      await documentRef
-          .set(
-            productModel.toJson(),
-          )
-          .then(
-            (value) async => getProductsStream(),
-          );
+      // If a document with the same title exists, handle it accordingly
+      if (querySnapshot.docs.isNotEmpty) {
+        debugPrint("Product is already added as a favorite.");
+        // You can choose to update the existing document or skip the addition
+        // Example: Update the existing document's fields
+        // await querySnapshot.docs.first.reference.update({
+        //   'field1': newValue1,
+        //   'field2': newValue2,
+        //   // ... other fields you may want to update
+        // });
+      } else {
+        // If the product is not already added, proceed with adding it
+        DocumentReference documentRef =
+            _userCollection.doc(user!.uid).collection("favorites").doc();
+        await documentRef
+            .set(
+              productModel.toJson(),
+            )
+            .then(
+              (value) async => getFavoritesStream(),
+            );
+        Get.snackbar(
+          "Failed",
+          "Already Added as Favorite",
+        );
+      }
     } on FirebaseException catch (e) {
       exceptionError(
         exception: e,
@@ -62,27 +83,61 @@ class ProductController extends GetxController {
     }
   }
 
-  Stream<List<ProductModel>> getProductsStream() {
-    return _productsCollection
+  Stream<List<Product>> getFavoritesStream() {
+    return _userCollection
         .doc(user!.uid)
-        .collection("product")
+        .collection("favorites")
         .snapshots()
         .map((querySnapshot) {
-      List<ProductModel> products = [];
+      List<Product> products = [];
       for (var documentSnapshot in querySnapshot.docs) {
-        ProductModel productModel =
-            ProductModel.fromJson(documentSnapshot.data());
-        productModel.id = documentSnapshot.id;
+        Product productModel = Product.fromJson(documentSnapshot.data());
+
         products.add(productModel);
       }
       return products;
     });
   }
 
-  removeFavorite(Product? product) {
-    if (favorites.contains(product)) {
-      favorites.remove(product!);
-      debugPrint("Favorites: ${favorites.length}");
+  Future removeFavorite({
+    Product? productModel,
+  }) async {
+    try {
+      // Query to find the document with the specified title
+      QuerySnapshot querySnapshot = await _userCollection
+          .doc(user!.uid)
+          .collection("favorites")
+          .where('id', isEqualTo: productModel!.id)
+          .get();
+
+      // Check if there is any document matching the query
+      if (querySnapshot.docs.isNotEmpty) {
+        // Delete the first document found (assuming titles are unique)
+        await querySnapshot.docs.first.reference.delete();
+        // Optionally, you can call getFavoritesStream() after deletion
+
+        getFavoritesStream();
+        Get.snackbar(
+          "Deleted",
+          "Deleted as Favorite",
+        );
+      } else {
+        debugPrint("Document not found");
+      }
+    } on FirebaseException catch (e) {
+      exceptionError(
+        exception: e,
+      );
     }
+  }
+
+  void exceptionError({
+    FirebaseException? exception,
+  }) {
+    Get.snackbar(
+      "Something went wrong",
+      exception!.code,
+    );
+    throw Exception(exception.message);
   }
 }

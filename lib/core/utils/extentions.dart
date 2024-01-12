@@ -71,18 +71,11 @@ extension StringExtensions on String {
     return null;
   }
 
-  // bool isEmail() {
-  //   final RegExp emailRegex = RegExp(
-  //     r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$',
-  //   );
-  //   return emailRegex.hasMatch(this);
-  // }
-
   // format currency to Indian format
   String toCurrency() {
     final formatter = NumberFormat.currency(
-      locale: 'en_NG',
-      symbol: '₦',
+      locale: 'en_EU',
+      symbol: '€',
       decimalDigits: 0,
     );
     return formatter.format(double.parse(this));

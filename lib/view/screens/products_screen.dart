@@ -38,43 +38,50 @@ class _ProductsScreenState extends State<ProductsScreen> {
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(25),
-          child: isLoading == true
-              ? const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                )
-              : productController.products!.isEmpty
-                  ? Center(
-                      child: Text(
-                        "No Products",
-                        style: theme.textTheme.displaySmall,
-                      ),
-                    )
-                  : Column(
-                      children: [
-                        Text(
-                          "Products",
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.titleLarge,
+        child: RefreshIndicator.adaptive(
+          onRefresh: () async {
+            await fetchData();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(25),
+            child: isLoading == true
+                ? const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  )
+                : productController.products!.isEmpty
+                    ? Center(
+                        child: Text(
+                          "No Products",
+                          style: theme.textTheme.displaySmall,
                         ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: productController.products!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              final product =
-                                  productController.products![index];
-                              return ProducWidget(
-                                product: product,
-                                onPressed: () {
-                                  debugPrint("Product:${product.title}");
-                                },
-                              );
-                            },
+                      )
+                    : Column(
+                        children: [
+                          Text(
+                            "Products",
+                            textAlign: TextAlign.center,
+                            style: theme.textTheme.titleLarge,
                           ),
-                        ),
-                      ],
-                    ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: productController.products!.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final product =
+                                    productController.products![index];
+                                return ProducWidget(
+                                  product: product,
+                                  onPressed: () {
+                                    productController.addFavorite(
+                                      productModel: product,
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+          ),
         ),
       ),
     );

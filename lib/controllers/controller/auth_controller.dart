@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 class AuthenticationController extends GetxController {
   final FirebaseAuth user = FirebaseAuth.instance;
+
   User? currentUser;
   Future signup({
     String? emailAddress,

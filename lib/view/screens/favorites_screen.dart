@@ -1,4 +1,5 @@
 import 'package:commerce_app/controllers/controller/product_controller.dart';
+import 'package:commerce_app/data/models/products_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../widgets/product_widget.dart';
@@ -29,24 +30,44 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 textAlign: TextAlign.center,
                 style: theme.textTheme.titleLarge,
               ),
-              productController.favorites.isEmpty
-                  ? const Center(
-                      child: Text("No Favorite"),
-                    )
-                  : Expanded(
-                      child: ListView.builder(
-                        itemCount: productController.favorites.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final product = productController.favorites[index];
-                          return ProducWidget(
-                            product: product,
-                            onPressed: () {
-                              productController.removeFavorite(product);
-                            },
-                          );
-                        },
-                      ),
-                    ),
+              Expanded(
+                child: StreamBuilder<List<Product>>(
+                  stream: productController.getFavoritesStream(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      List<Product> products = snapshot.data ?? [];
+                      // Use the 'debtors' list to build your UI.
+                      return products.isEmpty
+                          ? Center(
+                              child: Text(
+                                "No Favorites",
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: products.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ProducWidget(
+                                  product: products[index],
+                                  isfavorite: true,
+                                  onPressed: () {
+                                    productController.removeFavorite(
+                                      productModel: products[index],
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                    }
+                  },
+                ),
+              ),
             ],
           ),
         ),

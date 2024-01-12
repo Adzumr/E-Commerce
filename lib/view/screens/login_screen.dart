@@ -29,14 +29,6 @@ class _LoginScreenState extends State<LoginScreen> {
       canPop: false,
       child: Scaffold(
         backgroundColor: theme.colorScheme.background,
-        appBar: AppBar(
-          title: const Text(
-            "Log in",
-          ),
-          titleTextStyle: theme.textTheme.titleLarge,
-          centerTitle: true,
-          backgroundColor: theme.colorScheme.background,
-        ),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -49,6 +41,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     // const AppLogo(),
                     const SizedBox(height: 48),
+                    ListTile(
+                      title: Text(
+                        "Welcome Back!",
+                        style: theme.textTheme.titleLarge,
+                      ),
+                      subtitle: Text(
+                        "Log in to your Immersive Commerce account to continue your seamless shopping experience.",
+                        style: theme.textTheme.bodyLarge,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
                     TextFormField(
                       controller: emailAddressController,
                       keyboardType: TextInputType.emailAddress,

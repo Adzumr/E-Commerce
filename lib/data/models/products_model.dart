@@ -1,5 +1,5 @@
 class Product {
-  num? id;
+  dynamic id;
   final String? title;
   final num? price;
   final String? description;
@@ -18,7 +18,7 @@ class Product {
   });
 
   Product.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as num?,
+      : id = json['id'] as dynamic,
         title = json['title'] as String?,
         price = json['price'] as num?,
         description = json['description'] as String?,

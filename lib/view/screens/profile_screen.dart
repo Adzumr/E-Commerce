@@ -37,6 +37,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       ListTile(
                         leading: const Icon(
+                          Icons.email_outlined,
+                        ),
+                        title: Text(
+                          "Email",
+                          style: theme.textTheme.titleMedium,
+                        ),
+                        subtitle: Text(
+                          "${authController.user.currentUser!.email}",
+                          style: theme.textTheme.bodyLarge,
+                        ),
+                      ),
+                      ListTile(
+                        leading: const Icon(
                           Icons.person_outline,
                         ),
                         title: Text(
@@ -54,29 +67,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               context: context,
                               builder: (context) {
                                 final nameController = TextEditingController();
+                                final formKey = GlobalKey<FormState>();
                                 return AlertDialog.adaptive(
-                                  title: const Text(
-                                    "Update Name",
-                                  ),
-                                  content: TextFormField(
-                                    controller: nameController,
+                                  title: const Text("Update Name"),
+                                  content: Form(
+                                    key: formKey,
+                                    child: TextFormField(
+                                      keyboardType: TextInputType.name,
+                                      validator: (value) {
+                                        if (value!.trim().isEmpty) {
+                                          return "Enter Name";
+                                        }
+                                        return null;
+                                      },
+                                      controller: nameController,
+                                      decoration: const InputDecoration(
+                                        labelText: "Name",
+                                      ),
+                                    ),
                                   ),
                                   actions: [
                                     ElevatedButton(
                                       onPressed: () async {
-                                        Get.back();
+                                        if (formKey.currentState!.validate()) {
+                                          await authController.user.currentUser!
+                                              .updateDisplayName(
+                                            nameController.text.trim(),
+                                          )
+                                              .then((value) {
+                                            debugPrint("Success");
+                                          });
+                                          setState(() {});
+                                          Get.back();
+                                        }
                                       },
-                                      child: const Text(
-                                        "Update",
-                                      ),
+                                      child: const Text("Update"),
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                        Get.back();
-                                      },
-                                      child: const Text(
-                                        "Cancel",
-                                      ),
+                                      onPressed: () {},
+                                      child: const Text("Close"),
                                     ),
                                   ],
                                 );
@@ -88,23 +117,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                       ),
-                      ListTile(
-                        leading: const Icon(
-                          Icons.email_outlined,
-                        ),
-                        title: Text(
-                          "Email",
-                          style: theme.textTheme.titleMedium,
-                        ),
-                        subtitle: Text(
-                          "${authController.user.currentUser!.email}",
-                          style: theme.textTheme.bodyLarge,
-                        ),
-                      ),
                     ],
                   ),
                 ),
               ),
+              const SizedBox(height: 20),
               isLoading!
                   ? const Center(
                       child: CircularProgressIndicator.adaptive(),
