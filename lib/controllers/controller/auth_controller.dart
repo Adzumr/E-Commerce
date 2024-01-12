@@ -4,10 +4,11 @@ import 'package:get/get.dart';
 
 class AuthenticationController extends GetxController {
   final FirebaseAuth user = FirebaseAuth.instance;
-
+  User? currentUser;
   Future signup({
     String? emailAddress,
     String? password,
+    String? fullName,
   }) async {
     try {
       await user
@@ -21,6 +22,7 @@ class AuthenticationController extends GetxController {
           )
           .then(
         (value) async {
+          await user.currentUser!.updateDisplayName(fullName!);
           Get.toNamed(AppRouteNames.main);
         },
       );
@@ -30,7 +32,7 @@ class AuthenticationController extends GetxController {
       );
     } catch (e) {
       Get.snackbar(
-        "Error",
+        "Something went wrong",
         "$e",
       );
       throw Exception(e);
@@ -93,45 +95,11 @@ class AuthenticationController extends GetxController {
     }
   }
 
-  // Future resetPassword({
-  //   String? emailAddress,
-  // }) async {
-  //   try {
-  //     await user
-  //         .sendPasswordResetEmail(
-  //           email: emailAddress!,
-  //         )
-  //         .timeout(
-  //           const Duration(seconds: 10),
-  //           onTimeout: () => throw 'Timeout',
-  //         )
-  //         .then((value) {
-  //       Get.snackbar(
-  //         "Email Sent",
-  //         "Reset Link is sent to your email",
-  //       );
-  //       Get.toNamed(
-  //         AppRouteNames.resetPassword,
-  //       );
-  //     });
-  //   } on FirebaseAuthException catch (exception) {
-  //     exceptionError(
-  //       exception: exception,
-  //     );
-  //   } catch (e) {
-  //     Get.snackbar(
-  //       "Error",
-  //       "$e",
-  //     );
-  //     throw Exception(e);
-  //   }
-  // }
-
   void exceptionError({
     FirebaseAuthException? exception,
   }) {
     Get.snackbar(
-      "Error",
+      "Something went wrong",
       exception!.code,
     );
     throw Exception(exception.message);

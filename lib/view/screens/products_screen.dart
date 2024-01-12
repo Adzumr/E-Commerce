@@ -70,6 +70,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                   productController.products![index];
                               return ProducWidget(
                                 product: product,
+                                onPressed: () {
+                                  debugPrint("Product:${product.title}");
+                                },
                               );
                             },
                           ),

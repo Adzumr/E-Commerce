@@ -1,6 +1,6 @@
+import 'package:commerce_app/controllers/controller/product_controller.dart';
 import 'package:flutter/material.dart';
-
-import '../../data/models/products_model.dart';
+import 'package:get/get.dart';
 import '../widgets/product_widget.dart';
 
 class FavoritesScreen extends StatefulWidget {
@@ -12,8 +12,16 @@ class FavoritesScreen extends StatefulWidget {
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
+  void initState() {
+    productController.favorites;
+    super.initState();
+  }
+
+  final productController = Get.find<ProductController>();
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Scaffold(
       backgroundColor: theme.colorScheme.background,
       body: SafeArea(
@@ -27,29 +35,24 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 textAlign: TextAlign.center,
                 style: theme.textTheme.titleLarge,
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (BuildContext context, int index) {
-                    final product = Product(
-                      category: "Men",
-                      description: "Men Description",
-                      id: 01,
-                      image:
-                          "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
-                      price: 35567,
-                      rating: Rating(
-                        count: 247,
-                        rate: 4.5,
+              productController.favorites!.isEmpty
+                  ? const Center(
+                      child: Text("No Favorite"),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: productController.favorites!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final product = productController.favorites![index];
+                          return ProducWidget(
+                            product: product,
+                            onPressed: () {
+                              productController.removeFavorite(product);
+                            },
+                          );
+                        },
                       ),
-                      title: "T-Shirt",
-                    );
-                    return ProducWidget(
-                      product: product,
-                    );
-                  },
-                ),
-              )
+                    ),
             ],
           ),
         ),

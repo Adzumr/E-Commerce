@@ -54,9 +54,9 @@ class EcommerceApp extends StatelessWidget {
       /// The routes for the app.
       initialRoute: sharedPreferences!.getBool("skipIntro") != true
           ? AppRouteNames.introduction
-          // : firebaseAuth!.currentUser != null
-          //     ? AppRouteNames.main
-          : AppRouteNames.login,
+          : firebaseAuth!.currentUser != null
+              ? AppRouteNames.main
+              : AppRouteNames.login,
     );
   }
 }

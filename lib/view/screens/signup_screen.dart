@@ -21,6 +21,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final authController = Get.find<AuthenticationController>();
 
   final formKey = GlobalKey<FormState>();
+  final fullNameController = TextEditingController();
   final emailAddressController = TextEditingController();
   final passwordController = TextEditingController();
   @override
@@ -51,6 +52,24 @@ class _SignupScreenState extends State<SignupScreen> {
                     children: [
                       // const AppLogo(),
                       const SizedBox(height: 48),
+                      TextFormField(
+                        controller: fullNameController,
+                        keyboardType: TextInputType.name,
+                        validator: (value) {
+                          if (value!.trim().isEmpty) {
+                            return "Enter Your name";
+                          }
+
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          labelText: "Full name",
+                          prefixIcon: Icon(
+                            Icons.person_outline,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
                       TextFormField(
                         controller: emailAddressController,
                         keyboardType: TextInputType.emailAddress,
@@ -119,6 +138,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       isLoading = true;
                                     });
                                     await authController.signup(
+                                      fullName: fullNameController.text.trim(),
                                       emailAddress:
                                           emailAddressController.text.trim(),
                                       password: passwordController.text.trim(),
@@ -146,7 +166,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               text: 'Login',
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  context.pushNamed(AppRouteNames.login);
+                                  Get.toNamed(AppRouteNames.login);
                                 },
                               style: theme.textTheme.bodyMedium!.copyWith(
                                 color: theme.colorScheme.primary,

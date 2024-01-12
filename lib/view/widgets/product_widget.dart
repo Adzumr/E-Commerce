@@ -11,10 +11,12 @@ class ProducWidget extends StatelessWidget {
     super.key,
     required this.product,
     this.isfavorite = false,
+    this.onPressed,
   });
 
   final Product product;
   final bool isfavorite;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ class ProducWidget extends StatelessWidget {
                 Align(
                   alignment: Alignment.topRight,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: onPressed,
                     icon: Icon(
                       isfavorite ? Icons.favorite : Icons.favorite_outline,
                       color: theme.colorScheme.error,

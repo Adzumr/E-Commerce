@@ -8,6 +8,7 @@ import '../../data/models/products_model.dart';
 
 class ProductController extends GetxController {
   List<Product>? products;
+  List<Product>? favorites;
   Future<List<Product>> fetchProducts() async {
     try {
       final response = await http.get(
@@ -30,6 +31,24 @@ class ProductController extends GetxController {
       // Handle any errors that occurred during the HTTP request.
       debugPrint('Error fetching products: $error');
       throw Exception('Failed to fetch products');
+    }
+  }
+
+  addFavorite(Product? product) {
+    if (favorites!.isEmpty) {
+      favorites!.add(product!);
+      debugPrint("Favorites: $product");
+    }
+    if (!favorites!.contains(product)) {
+      favorites!.add(product!);
+      debugPrint("Favorites: ${favorites!.length}");
+    }
+  }
+
+  removeFavorite(Product? product) {
+    if (favorites!.contains(product)) {
+      favorites!.remove(product!);
+      debugPrint("Favorites: ${favorites!.length}");
     }
   }
 }

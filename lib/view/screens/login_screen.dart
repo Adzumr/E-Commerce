@@ -163,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             text: 'Sign Up',
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                context.pushNamed(AppRouteNames.signup);
+                                Get.toNamed(AppRouteNames.signup);
                               },
                             style: theme.textTheme.bodyMedium!.copyWith(
                               color: theme.colorScheme.primary,
