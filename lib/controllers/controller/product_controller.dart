@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:commerce_app/core/utils/app_constants.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:commerce_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,10 +9,9 @@ import 'package:http/http.dart' as http;
 import '../../models/products_model.dart';
 
 class ProductController extends GetxController {
-  User? user = FirebaseAuth.instance.currentUser;
+  final _userCollection = FirebaseFirestore.instance.collection('favorites');
 
-  final _userCollection = FirebaseFirestore.instance.collection('user');
-  List<Product>? products;
+  final RxList<Product> products = <Product>[].obs;
   final RxList<Product> favorites = <Product>[].obs;
   Future<List<Product>> fetchProducts() async {
     try {
@@ -22,9 +21,9 @@ class ProductController extends GetxController {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         // If the server returns a 200 OK response, parse the products.
         List<dynamic> data = jsonDecode(response.body);
-        products = data.map((json) => Product.fromJson(json)).toList();
-        debugPrint("Products: ${products!.length}");
-        return products!;
+        products.value = data.map((json) => Product.fromJson(json)).toList();
+        debugPrint("Products: ${products.length}");
+        return products;
       } else {
         throw Exception('Failed to load products');
       }
@@ -33,53 +32,45 @@ class ProductController extends GetxController {
     }
   }
 
-  Future addFavorite({
-    Product? productModel,
-  }) async {
+  Future<void> addFavorite({required Product product}) async {
     try {
       // Check if the product is already added by querying the "favorites" collection
       QuerySnapshot querySnapshot = await _userCollection
-          .doc(user!.uid)
+          .doc(firebaseAuth!.currentUser!.uid)
           .collection("favorites")
-          .where('title', isEqualTo: productModel!.title)
+          .where('id', isEqualTo: product.id)
           .get();
 
-      // If a document with the same title exists, handle it accordingly
+      // If a document with the same id exists, handle it accordingly
       if (querySnapshot.docs.isNotEmpty) {
         debugPrint("Product is already added as a favorite.");
-        // You can choose to update the existing document or skip the addition
-        // Example: Update the existing document's fields
-        // await querySnapshot.docs.first.reference.update({
-        //   'field1': newValue1,
-        //   'field2': newValue2,
-        //   // ... other fields you may want to update
-        // });
-      } else {
-        // If the product is not already added, proceed with adding it
-        DocumentReference documentRef =
-            _userCollection.doc(user!.uid).collection("favorites").doc();
-        await documentRef
-            .set(
-              productModel.toJson(),
-            )
-            .then(
-              (value) async => getFavoritesStream(),
-            );
         Get.snackbar(
           "Failed",
-          "Already Added as Favorite",
+          "Product is already added as Favorite",
+        );
+      } else {
+        // If the product is not already added, proceed with adding it
+        await _userCollection
+            .doc(firebaseAuth!.currentUser!.uid)
+            .collection("favorites")
+            .add(product.toJson());
+
+        // Refresh the favorites stream
+        getFavoritesStream();
+
+        Get.snackbar(
+          "Success",
+          "Product added to favorites",
         );
       }
     } on FirebaseException catch (e) {
-      exceptionError(
-        exception: e,
-      );
+      exceptionError(exception: e);
     }
   }
 
   Stream<List<Product>> getFavoritesStream() {
     return _userCollection
-        .doc(user!.uid)
+        .doc(firebaseAuth!.currentUser!.uid)
         .collection("favorites")
         .snapshots()
         .map((querySnapshot) {
@@ -99,7 +90,7 @@ class ProductController extends GetxController {
     try {
       // Query to find the document with the specified title
       QuerySnapshot querySnapshot = await _userCollection
-          .doc(user!.uid)
+          .doc(firebaseAuth!.currentUser!.uid)
           .collection("favorites")
           .where('id', isEqualTo: productModel!.id)
           .get();

@@ -48,7 +48,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 ? const Center(
                     child: CircularProgressIndicator.adaptive(),
                   )
-                : productController.products!.isEmpty
+                : productController.products.isEmpty
                     ? Center(
                         child: Text(
                           "No Products",
@@ -64,15 +64,15 @@ class _ProductsScreenState extends State<ProductsScreen> {
                           ),
                           Expanded(
                             child: ListView.builder(
-                              itemCount: productController.products!.length,
+                              itemCount: productController.products.length,
                               itemBuilder: (BuildContext context, int index) {
                                 final product =
-                                    productController.products![index];
+                                    productController.products[index];
                                 return ProducWidget(
                                   product: product,
                                   onPressed: () {
                                     productController.addFavorite(
-                                      productModel: product,
+                                      product: product,
                                     );
                                   },
                                 );

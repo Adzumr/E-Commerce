@@ -1,4 +1,5 @@
 import 'package:commerce_app/controllers/controller/auth_controller.dart';
+import 'package:commerce_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -44,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: theme.textTheme.titleMedium,
                         ),
                         subtitle: Text(
-                          "${authController.userModel!.email}",
+                          "${firebaseAuth!.currentUser!.email}",
                           style: theme.textTheme.bodyLarge,
                         ),
                       ),
@@ -57,7 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: theme.textTheme.titleMedium,
                         ),
                         subtitle: Text(
-                          authController.userModel?.name ?? "No Name",
+                          firebaseAuth!.currentUser!.displayName ?? "No Name",
                           style: theme.textTheme.bodyLarge,
                         ),
                         trailing: IconButton(

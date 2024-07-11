@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:commerce_app/core/route_config/route_names.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -7,42 +6,21 @@ import '../../main.dart';
 import '../../models/user_model.dart';
 
 class AuthController extends GetxController {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final _customers = FirebaseFirestore.instance.collection('customers');
-
-  // TODO: Allow permission to write to firestore
-  UserModel? userModel;
-  Future<UserModel?> registerUser({
+  Future registerUser({
     required UserModel? customer,
     required final String? password,
   }) async {
     try {
-      // Step 1: Create user with email and password
-      UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
+      await firebaseAuth!
+          .createUserWithEmailAndPassword(
         email: customer!.email!,
         password: password!,
-      );
-      customer.id = userCredential.user!.uid;
-      // Step 2: Store additional user data in Firestore
-      await _customers.doc(userCredential.user!.uid).set(
-        {
-          ...customer.toJson(),
-        },
-      );
-
-      // Step 3: Retrieve user data from Firestore
-      DocumentSnapshot userSnapshot =
-          await _customers.doc(userCredential.user!.uid).get();
-      Map<String, dynamic>? userData =
-          userSnapshot.data() as Map<String, dynamic>?;
-
-      // Step 4: Create a User model and return it
-      if (userData != null) {
-        userModel = UserModel.fromJson(userData);
+      )
+          .then((value) async {
+        await firebaseAuth!.currentUser!.updateDisplayName(customer.name);
         await sharedPreferences!.setBool("skipIntro", true);
         Get.toNamed(Routes.home);
-      }
+      });
     } on FirebaseAuthException catch (exception) {
       exceptionError(
         exception: exception,
@@ -55,32 +33,23 @@ class AuthController extends GetxController {
       );
       throw Exception(e);
     }
-    return userModel;
   }
 
-  Future<UserModel?> loginUser({
+  Future loginUser({
     required String? email,
     required String? password,
   }) async {
     try {
       // Step 1: Sign in user with email and password
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      await firebaseAuth!
+          .signInWithEmailAndPassword(
         email: email!,
         password: password!,
-      );
-
-      // Step 3: Retrieve user data from Firestore
-      DocumentSnapshot userSnapshot =
-          await _customers.doc(userCredential.user!.uid).get();
-      Map<String, dynamic>? userData =
-          userSnapshot.data() as Map<String, dynamic>?;
-
-      // Step 4: Create a User model and return it
-      if (userData != null) {
-        userModel = UserModel.fromJson(userData);
+      )
+          .then((value) async {
         await sharedPreferences!.setBool("skipIntro", true);
         Get.toNamed(Routes.home);
-      }
+      });
     } on FirebaseAuthException catch (exception) {
       exceptionError(
         exception: exception,
@@ -88,12 +57,11 @@ class AuthController extends GetxController {
     } catch (e) {
       throw Exception(e);
     }
-    return userModel;
   }
 
   Future signOut() async {
     try {
-      await _auth.signOut().then(
+      await firebaseAuth!.signOut().then(
         (value) {
           Get.snackbar(
             "Log out",

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controllers/controller/auth_controller.dart';
+import '../../../main.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -19,9 +20,7 @@ class AccountScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                ProfileHead(
-                  authController: authController,
-                ),
+                const ProfileHead(),
                 const SizedBox(height: 32),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -121,12 +120,19 @@ class OptionTile extends StatelessWidget {
   }
 }
 
-class ProfileHead extends StatelessWidget {
+class ProfileHead extends StatefulWidget {
   const ProfileHead({
     super.key,
-    required this.authController,
   });
-  final AuthController? authController;
+
+  @override
+  State<ProfileHead> createState() => _ProfileHeadState();
+}
+
+class _ProfileHeadState extends State<ProfileHead> {
+  final formKey = GlobalKey<FormState>();
+  final name =
+      TextEditingController(text: firebaseAuth!.currentUser!.displayName);
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -136,12 +142,12 @@ class ProfileHead extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: CachedNetworkImage(
-            imageUrl: authController?.userModel?.name ?? "",
+            imageUrl: firebaseAuth?.currentUser?.photoURL ?? "",
             height: 200,
             fit: BoxFit.fill,
             errorWidget: (context, url, error) => const Icon(
               Icons.account_circle_outlined,
-              size: 150,
+              size: 200,
             ),
             placeholder: (context, url) => const Center(
               child: CircularProgressIndicator.adaptive(),
@@ -150,15 +156,77 @@ class ProfileHead extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          "${authController?.userModel?.email}",
+          "${firebaseAuth?.currentUser?.email}",
           textAlign: TextAlign.center,
           style: theme.textTheme.titleMedium,
         ),
         Text(
-          "${authController?.userModel?.name}",
+          "${firebaseAuth?.currentUser?.displayName}",
           textAlign: TextAlign.center,
           style: theme.textTheme.bodyMedium,
         ),
+        IconButton(
+          onPressed: () async {
+            ValueNotifier isLoading = ValueNotifier<bool>(false);
+            final formKey = GlobalKey<FormState>();
+            final name = TextEditingController(
+                text: firebaseAuth!.currentUser!.displayName);
+            showAdaptiveDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog.adaptive(
+                  title: Text(
+                    "Update Name",
+                    style: theme.textTheme.titleLarge,
+                  ),
+                  content: Form(
+                    key: formKey,
+                    child: TextFormField(
+                      controller: name,
+                      validator: (value) {
+                        if (value!.trim().isEmpty) {
+                          return "Enter Name";
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  actions: [
+                    ValueListenableBuilder(
+                      valueListenable: isLoading,
+                      builder:
+                          (BuildContext context, dynamic value, Widget? child) {
+                        return isLoading.value == true
+                            ? const Center(
+                                child: CircularProgressIndicator.adaptive(),
+                              )
+                            : ElevatedButton(
+                                onPressed: () async {
+                                  try {
+                                    isLoading.value = true;
+                                    await firebaseAuth!.currentUser!
+                                        .updateDisplayName(
+                                      name.text.trim(),
+                                    );
+                                  } finally {
+                                    isLoading.value = false;
+                                    Get.back();
+                                    setState(() {});
+                                  }
+                                },
+                                child: const Text("Update"),
+                              );
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          icon: const Icon(
+            Icons.edit,
+          ),
+        )
       ],
     );
   }
