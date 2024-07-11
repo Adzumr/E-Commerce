@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../data/models/welcome_model.dart';
+import '../../models/welcome_model.dart';
 import 'app_assets.dart';
 
 class Helper {

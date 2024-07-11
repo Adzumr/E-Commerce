@@ -52,5 +52,8 @@ class Rating {
       : rate = json['rate'] as num?,
         count = json['count'] as num?;
 
-  Map<String, dynamic> toJson() => {'rate': rate, 'count': count};
+  Map<String, dynamic> toJson() => {
+        'rate': rate,
+        'count': count,
+      };
 }

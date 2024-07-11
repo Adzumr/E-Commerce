@@ -1,6 +1,6 @@
-import 'package:commerce_app/view/screens/favorites_screen.dart';
-import 'package:commerce_app/view/screens/products_screen.dart';
-import 'package:commerce_app/view/screens/profile_screen.dart';
+import 'package:commerce_app/view/screens/product/favorites_screen.dart';
+import 'package:commerce_app/view/screens/product/products_screen.dart';
+import 'package:commerce_app/view/screens/authentication/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
@@ -25,7 +25,7 @@ class _MainScreenState extends State<MainScreen> {
             });
           },
           indicatorColor: Theme.of(context).colorScheme.secondary,
-          surfaceTintColor: Theme.of(context).colorScheme.background,
+          surfaceTintColor: Theme.of(context).colorScheme.surface,
           labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
           selectedIndex: currentPageIndex,
           destinations: const <Widget>[

@@ -2,7 +2,7 @@ import 'package:commerce_app/core/route_config/route_names.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
-class AuthenticationController extends GetxController {
+class AuthController extends GetxController {
   final FirebaseAuth user = FirebaseAuth.instance;
 
   User? currentUser;
@@ -24,7 +24,7 @@ class AuthenticationController extends GetxController {
           .then(
         (value) async {
           await user.currentUser!.updateDisplayName(fullName!);
-          Get.toNamed(AppRouteNames.main);
+          Get.toNamed(AppRouteNames.home);
         },
       );
     } on FirebaseAuthException catch (exception) {
@@ -56,7 +56,7 @@ class AuthenticationController extends GetxController {
           )
           .then(
         (value) {
-          Get.toNamed(AppRouteNames.main);
+          Get.toNamed(AppRouteNames.home);
         },
       );
     } on FirebaseAuthException catch (exception) {

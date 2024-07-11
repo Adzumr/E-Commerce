@@ -2,7 +2,7 @@ import 'package:commerce_app/controllers/controller/product_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../widgets/product_widget.dart';
+import '../../widgets/product_widget.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -36,7 +36,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
         child: RefreshIndicator.adaptive(
           onRefresh: () async {

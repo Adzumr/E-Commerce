@@ -3,7 +3,7 @@ class AppRouteNames {
   static const String introduction = "introduction";
   static const String login = "login";
   static const String signup = "signup";
-  static const String main = "main";
+  static const String home = "";
   static const String products = "products";
   static const String product = "product";
   static const String favorites = "favorites";

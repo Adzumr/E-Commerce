@@ -3,8 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/controller/auth_controller.dart';
-import '../../core/route_config/route_names.dart';
+import '../../../controllers/controller/auth_controller.dart';
+import '../../../core/route_config/route_names.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -17,7 +17,7 @@ class _SignupScreenState extends State<SignupScreen> {
   bool? isVisible = true;
   bool? isLoading = false;
 
-  final authController = Get.find<AuthenticationController>();
+  final authController = Get.find<AuthController>();
 
   final formKey = GlobalKey<FormState>();
   final fullNameController = TextEditingController();
@@ -30,7 +30,7 @@ class _SignupScreenState extends State<SignupScreen> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-          backgroundColor: theme.colorScheme.background,
+          backgroundColor: theme.colorScheme.surface,
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(20),

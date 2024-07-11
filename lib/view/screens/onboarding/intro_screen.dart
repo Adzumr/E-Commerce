@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../../core/route_config/route_names.dart';
-import '../../core/utils/helper.dart';
-import '../../main.dart';
+import '../../../core/route_config/route_names.dart';
+import '../../../core/utils/helper.dart';
+import '../../../main.dart';
 
 class IntroductionScreen extends StatelessWidget {
   const IntroductionScreen({super.key});
@@ -14,7 +14,7 @@ class IntroductionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final PageController pageController = PageController();
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: PopScope(
         canPop: false,
         child: SafeArea(

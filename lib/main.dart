@@ -42,7 +42,7 @@ class EcommerceApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       enableLog: false,
-      title: AppConstants().appName,
+      title: AppConstants.appName,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       defaultTransition: Transition.zoom,
@@ -55,7 +55,7 @@ class EcommerceApp extends StatelessWidget {
       initialRoute: sharedPreferences!.getBool("skipIntro") != true
           ? AppRouteNames.introduction
           : firebaseAuth!.currentUser != null
-              ? AppRouteNames.main
+              ? AppRouteNames.home
               : AppRouteNames.login,
     );
   }

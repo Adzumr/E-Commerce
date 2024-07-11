@@ -1,8 +1,8 @@
 import 'package:commerce_app/controllers/controller/product_controller.dart';
-import 'package:commerce_app/data/models/products_model.dart';
+import 'package:commerce_app/models/products_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../widgets/product_widget.dart';
+import '../../widgets/product_widget.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
@@ -18,7 +18,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(25),
