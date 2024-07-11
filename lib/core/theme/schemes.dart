@@ -11,7 +11,7 @@ class AppColorScheme {
   }
 
   AppColorScheme._(); // Private constructor
-  ColorScheme lightColorScheme = ColorScheme(
+  static ColorScheme lightColorScheme = ColorScheme(
     brightness: Brightness.light,
     primary: AppColor.primary,
     onPrimary: AppColor.onPrimary,
@@ -24,7 +24,7 @@ class AppColorScheme {
     tertiary: AppColor.tertiary,
     onTertiary: AppColor.onTertiary,
   );
-  ColorScheme darkColorScheme = ColorScheme(
+  static ColorScheme darkColorScheme = ColorScheme(
     brightness: Brightness.dark,
     primary: AppColor.darkPrimary,
     onPrimary: AppColor.darkOnPrimary,

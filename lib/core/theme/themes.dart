@@ -7,12 +7,13 @@ import 'schemes.dart';
 class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
-      colorScheme: AppColorScheme().lightColorScheme,
+      colorScheme: AppColorScheme.lightColorScheme,
       dividerTheme: DividerThemeData(
         color: AppColor.secondary,
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: AppColor.primary,
+        centerTitle: true,
         iconTheme: IconThemeData(
           color: AppColor.onPrimary,
         ),
@@ -76,6 +77,7 @@ class AppTheme {
         hintStyle: AppFont.labelMedium.copyWith(
           color: AppColor.primary,
         ),
+        errorBorder: errorInputBorder,
         focusedBorder: enabledInputBorder,
         enabledBorder: outlinedInputBorder,
         border: outlinedInputBorder,
@@ -101,12 +103,13 @@ class AppTheme {
 
   static ThemeData get darkTheme {
     return ThemeData(
-      colorScheme: AppColorScheme().darkColorScheme,
+      colorScheme: AppColorScheme.darkColorScheme,
       dividerTheme: DividerThemeData(
         color: AppColor.secondary,
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: AppColor.darkBackground,
+        centerTitle: true,
         iconTheme: IconThemeData(
           color: AppColor.onPrimary,
         ),
@@ -176,6 +179,7 @@ class AppTheme {
           color: AppColor.onPrimary,
         ),
         contentPadding: const EdgeInsets.all(10),
+        errorBorder: errorInputBorder,
         focusedBorder: enabledInputBorder,
         enabledBorder: outlinedInputBorder,
         border: outlinedInputBorder,
@@ -237,6 +241,14 @@ final enabledInputBorder = OutlineInputBorder(
   gapPadding: 10,
   borderSide: BorderSide(
     color: AppColor.primary,
+    width: 1,
+  ),
+);
+final errorInputBorder = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(15),
+  gapPadding: 10,
+  borderSide: BorderSide(
+    color: AppColor.error,
     width: 1,
   ),
 );
