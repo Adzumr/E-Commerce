@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../core/route_config/route_names.dart';
-import '../../data/models/products_model.dart';
+import '../../models/products_model.dart';
 
 class ProducWidget extends StatelessWidget {
   const ProducWidget({
@@ -27,7 +27,7 @@ class ProducWidget extends StatelessWidget {
         onTap: () {
           debugPrint("Product: ${product.title}");
           Get.toNamed(
-            AppRouteNames.product,
+            Routes.product,
             arguments: product,
           );
         },

@@ -11,64 +11,66 @@ class AppFont {
   AppFont._internal();
 
   /// Headline Font Styles
-  final TextStyle headlineLarge = GoogleFonts.inter(
+  static TextStyle headlineLarge = GoogleFonts.poppins(
     fontSize: 24,
     fontWeight: FontWeight.w700,
   );
-  final TextStyle headlineMedium = GoogleFonts.inter(
-    fontSize: 28,
-    fontWeight: FontWeight.w400,
+
+  static TextStyle headlineMedium = GoogleFonts.poppins(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
   );
-  final TextStyle headlineSmall = GoogleFonts.inter(
-    fontSize: 24,
-    fontWeight: FontWeight.w400,
+
+  static TextStyle headlineSmall = GoogleFonts.poppins(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
   );
 
   /// Title Font Styles
-  final TextStyle titleLarge = GoogleFonts.inter(
-    fontSize: 24,
+  static TextStyle titleLarge = GoogleFonts.poppins(
+    fontSize: 20,
     fontWeight: FontWeight.w700,
   );
 
-  final TextStyle titleMedium = GoogleFonts.inter(
+  static TextStyle titleMedium = GoogleFonts.poppins(
     fontSize: 16,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w600,
   );
-  final TextStyle titleSmall = GoogleFonts.inter(
+
+  static TextStyle titleSmall = GoogleFonts.poppins(
     fontSize: 14,
     fontWeight: FontWeight.w500,
-    letterSpacing: 0.10,
   );
 
   /// Body Font Styles
-  final TextStyle bodyLarge = GoogleFonts.inter(
+  static TextStyle bodyLarge = GoogleFonts.poppins(
     fontSize: 16,
     fontWeight: FontWeight.w400,
   );
 
-  final TextStyle bodyMedium = GoogleFonts.inter(
+  static TextStyle bodyMedium = GoogleFonts.poppins(
     fontSize: 14,
     fontWeight: FontWeight.w400,
   );
 
-  final TextStyle bodySmall = GoogleFonts.inter(
+  static TextStyle bodySmall = GoogleFonts.poppins(
     fontSize: 12,
     fontWeight: FontWeight.w400,
   );
 
   /// Label Font Styles
-  final TextStyle labelLarge = GoogleFonts.inter(
+  static TextStyle labelLarge = GoogleFonts.poppins(
     fontSize: 16,
     fontWeight: FontWeight.w500,
   );
 
-  final TextStyle labelMedium = GoogleFonts.inter(
+  static TextStyle labelMedium = GoogleFonts.poppins(
     fontSize: 14,
     fontWeight: FontWeight.w500,
   );
-  final TextStyle labelSmall = GoogleFonts.inter(
+
+  static TextStyle labelSmall = GoogleFonts.poppins(
     fontSize: 12,
     fontWeight: FontWeight.w500,
-    letterSpacing: 0.50,
   );
 }

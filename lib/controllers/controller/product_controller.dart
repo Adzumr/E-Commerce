@@ -1,12 +1,12 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:commerce_app/core/utils/app_constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:http/http.dart' as http;
-import '../../data/models/products_model.dart';
+import '../../models/products_model.dart';
 
 class ProductController extends GetxController {
   User? user = FirebaseAuth.instance.currentUser;
@@ -17,10 +17,8 @@ class ProductController extends GetxController {
   Future<List<Product>> fetchProducts() async {
     try {
       final response = await http.get(
-        Uri.parse('https://fakestoreapi.com/products'),
+        Uri.parse('${AppConstants.baseUrl}/products'),
       );
-      debugPrint("Fetching...");
-
       if (response.statusCode >= 200 && response.statusCode < 300) {
         // If the server returns a 200 OK response, parse the products.
         List<dynamic> data = jsonDecode(response.body);
@@ -28,14 +26,10 @@ class ProductController extends GetxController {
         debugPrint("Products: ${products!.length}");
         return products!;
       } else {
-        // If the server did not return a 200 OK response,
-        // throw an exception.
         throw Exception('Failed to load products');
       }
     } catch (error) {
-      // Handle any errors that occurred during the HTTP request.
-      debugPrint('Error fetching products: $error');
-      throw Exception('Failed to fetch products');
+      throw Exception('Exception: $error');
     }
   }
 

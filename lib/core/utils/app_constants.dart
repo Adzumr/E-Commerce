@@ -9,6 +9,6 @@ class AppConstants {
 
   AppConstants._internal();
 
-  final String appName = "E-Commerce";
-  final String baseUrl = "https://fakestoreapi.com";
+  static String appName = "Shopping";
+  static String baseUrl = "https://fakestoreapi.com";
 }

@@ -42,10 +42,10 @@ class EcommerceApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       enableLog: false,
-      title: AppConstants().appName,
+      title: AppConstants.appName,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      defaultTransition: Transition.zoom,
+      defaultTransition: Transition.fade,
       themeMode: ThemeMode.system,
 
       /// The routes for the app.
@@ -53,10 +53,10 @@ class EcommerceApp extends StatelessWidget {
 
       /// The routes for the app.
       initialRoute: sharedPreferences!.getBool("skipIntro") != true
-          ? AppRouteNames.introduction
+          ? Routes.introduction
           : firebaseAuth!.currentUser != null
-              ? AppRouteNames.main
-              : AppRouteNames.login,
+              ? Routes.home
+              : Routes.login,
     );
   }
 }

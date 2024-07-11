@@ -1,15 +1,16 @@
 import 'package:commerce_app/controllers/binding/product_binding.dart';
-import 'package:commerce_app/view/screens/favorites_screen.dart';
-import 'package:commerce_app/view/screens/products_screen.dart';
-import 'package:commerce_app/view/screens/profile_screen.dart';
+import 'package:commerce_app/view/screens/authentication/account_screen.dart';
+import 'package:commerce_app/view/screens/product/favorites_screen.dart';
+import 'package:commerce_app/view/screens/product/products_screen.dart';
+import 'package:commerce_app/view/screens/authentication/profile_screen.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/binding/auth_binding.dart';
-import '../../view/screens/main_screen.dart';
-import '../../view/screens/intro_screen.dart';
-import '../../view/screens/login_screen.dart';
-import '../../view/screens/product_screen.dart';
-import '../../view/screens/signup_screen.dart';
+import '../../view/screens/onboarding/main_screen.dart';
+import '../../view/screens/onboarding/intro_screen.dart';
+import '../../view/screens/authentication/login_screen.dart';
+import '../../view/screens/product/product_screen.dart';
+import '../../view/screens/authentication/signup_screen.dart';
 import 'route_names.dart';
 
 class AppRoutesConfiguration {
@@ -18,33 +19,33 @@ class AppRoutesConfiguration {
       fullscreenDialog: true,
       participatesInRootNavigator: true,
       opaque: true,
-      name: '/${AppRouteNames.introduction}',
-      binding: AuthenticationBinding(),
+      name: '/${Routes.introduction}',
+      binding: AuthBinding(),
       page: () => const IntroductionScreen(),
     ),
     GetPage(
       fullscreenDialog: true,
       participatesInRootNavigator: true,
       opaque: true,
-      name: '/${AppRouteNames.login}',
-      binding: AuthenticationBinding(),
+      name: '/${Routes.login}',
+      binding: AuthBinding(),
       page: () => const LoginScreen(),
     ),
     GetPage(
       fullscreenDialog: true,
       participatesInRootNavigator: true,
       opaque: true,
-      name: '/${AppRouteNames.signup}',
-      binding: AuthenticationBinding(),
+      name: '/${Routes.signup}',
+      binding: AuthBinding(),
       page: () => const SignupScreen(),
     ),
     GetPage(
       fullscreenDialog: true,
       participatesInRootNavigator: true,
       opaque: true,
-      name: '/${AppRouteNames.main}',
+      name: '/${Routes.home}',
       bindings: [
-        AuthenticationBinding(),
+        AuthBinding(),
         ProductBinding(),
       ],
       page: () => const MainScreen(),
@@ -53,9 +54,9 @@ class AppRoutesConfiguration {
       fullscreenDialog: true,
       participatesInRootNavigator: true,
       opaque: true,
-      name: '/${AppRouteNames.products}',
+      name: '/${Routes.products}',
       bindings: [
-        AuthenticationBinding(),
+        AuthBinding(),
         ProductBinding(),
       ],
       page: () => const ProductsScreen(),
@@ -64,9 +65,9 @@ class AppRoutesConfiguration {
       fullscreenDialog: true,
       participatesInRootNavigator: true,
       opaque: true,
-      name: '/${AppRouteNames.product}',
+      name: '/${Routes.product}',
       bindings: [
-        AuthenticationBinding(),
+        AuthBinding(),
         ProductBinding(),
       ],
       page: () => const ProductScreen(),
@@ -75,9 +76,9 @@ class AppRoutesConfiguration {
       fullscreenDialog: true,
       participatesInRootNavigator: true,
       opaque: true,
-      name: '/${AppRouteNames.favorites}',
+      name: '/${Routes.favorites}',
       bindings: [
-        AuthenticationBinding(),
+        AuthBinding(),
         ProductBinding(),
       ],
       page: () => const FavoritesScreen(),
@@ -86,12 +87,23 @@ class AppRoutesConfiguration {
       fullscreenDialog: true,
       participatesInRootNavigator: true,
       opaque: true,
-      name: '/${AppRouteNames.profile}',
+      name: '/${Routes.profile}',
       bindings: [
-        AuthenticationBinding(),
+        AuthBinding(),
         ProductBinding(),
       ],
       page: () => const ProfileScreen(),
+    ),
+    GetPage(
+      fullscreenDialog: true,
+      participatesInRootNavigator: true,
+      opaque: true,
+      name: '/${Routes.account}',
+      bindings: [
+        AuthBinding(),
+        ProductBinding(),
+      ],
+      page: () => const AccountScreen(),
     ),
   ];
 }
