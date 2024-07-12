@@ -3,6 +3,7 @@ import 'package:commerce_app/models/user_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../controllers/controller/auth_controller.dart';
 import '../../../core/route_config/route_names.dart';
@@ -68,11 +69,11 @@ class _SignupScreenState extends State<SignupScreen> {
                             title: Text(
                               "Create an Account",
                               style: theme.textTheme.titleLarge,
-                            ),
+                            ).animate().fadeIn(duration: 500.ms).slide(),
                             subtitle: Text(
                               "Join our community and start exploring the best products on our decentralized marketplace.",
                               style: theme.textTheme.bodyLarge,
-                            ),
+                            ).animate().fadeIn(duration: 500.ms).slide(),
                           ),
                           const SizedBox(height: 20),
                           TextFormField(
@@ -95,7 +96,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 Icons.person_outline,
                               ),
                             ),
-                          ),
+                          ).animate().fadeIn(duration: 500.ms).slide(),
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _emailController,
@@ -120,7 +121,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 Icons.email_outlined,
                               ),
                             ),
-                          ),
+                          ).animate().fadeIn(duration: 500.ms).slide(),
                           const SizedBox(height: 16),
                           TextFormField(
                             obscureText: _isVisible!,
@@ -146,11 +147,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               suffixIcon: IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    if (_isVisible!) {
-                                      _isVisible = false;
-                                    } else {
-                                      _isVisible = true;
-                                    }
+                                    _isVisible = !_isVisible!;
                                   });
                                 },
                                 icon: Icon(
@@ -161,7 +158,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 ),
                               ),
                             ),
-                          ),
+                          ).animate().fadeIn(duration: 500.ms).slide(),
                         ],
                       ),
                     ),
@@ -170,7 +167,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 _isLoading!
                     ? const Center(
                         child: CircularProgressIndicator.adaptive(),
-                      )
+                      ).animate().fadeIn(duration: 500.ms).scale()
                     : ElevatedButton(
                         onPressed: () async {
                           context.dissmissKeyboard();
@@ -179,7 +176,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: const Text(
                           "Sign Up",
                         ),
-                      ),
+                      ).animate().fadeIn(duration: 500.ms).slide(),
                 const SizedBox(height: 16),
                 Text.rich(
                   TextSpan(
@@ -202,7 +199,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ],
                   ),
                   textAlign: TextAlign.center,
-                ),
+                ).animate().fadeIn(duration: 500.ms).slide(),
               ],
             ),
           ),

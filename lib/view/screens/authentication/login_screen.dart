@@ -2,6 +2,7 @@ import 'package:commerce_app/controllers/controller/auth_controller.dart';
 import 'package:commerce_app/core/utils/extentions.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import '../../../core/route_config/route_names.dart';
 
@@ -24,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _emailNode = FocusNode();
   final _passwordNode = FocusNode();
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -58,12 +60,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           Text(
                             "Welcome Back",
                             style: theme.textTheme.titleLarge,
-                          ),
+                          ).animate().fadeIn(duration: 500.ms).slide(),
                           const SizedBox(height: 10),
                           Text(
                             "Log in to your account to continue exploring our marketplace.",
                             style: theme.textTheme.bodyLarge,
-                          ),
+                          ).animate().fadeIn(duration: 500.ms).slide(),
                           const SizedBox(height: 20),
                           TextFormField(
                             controller: _emailController,
@@ -88,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Icons.email_outlined,
                               ),
                             ),
-                          ),
+                          ).animate().fadeIn(duration: 500.ms).slide(),
                           const SizedBox(height: 16),
                           TextFormField(
                             obscureText: _isVisible!,
@@ -114,11 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               suffixIcon: IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    if (_isVisible!) {
-                                      _isVisible = false;
-                                    } else {
-                                      _isVisible = true;
-                                    }
+                                    _isVisible = !_isVisible!;
                                   });
                                 },
                                 icon: Icon(
@@ -129,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
-                          ),
+                          ).animate().fadeIn(duration: 500.ms).slide(),
                           const SizedBox(height: 32),
                           Align(
                             alignment: Alignment.centerRight,
@@ -141,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: theme.colorScheme.primary,
                                   fontWeight: FontWeight.bold,
                                 ),
-                              ),
+                              ).animate().fadeIn(duration: 500.ms).slide(),
                             ),
                           ),
                         ],
@@ -152,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 _isLoading!
                     ? const Center(
                         child: CircularProgressIndicator.adaptive(),
-                      )
+                      ).animate().fadeIn(duration: 500.ms).scale()
                     : ElevatedButton(
                         onPressed: () async {
                           context.dissmissKeyboard();
@@ -161,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: const Text(
                           "Log in",
                         ),
-                      ),
+                      ).animate().fadeIn(duration: 500.ms).slide(),
                 const SizedBox(height: 16),
                 Text.rich(
                   TextSpan(
@@ -184,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                   textAlign: TextAlign.center,
-                ),
+                ).animate().fadeIn(duration: 500.ms).slide(),
               ],
             ),
           ),

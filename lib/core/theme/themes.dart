@@ -27,7 +27,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(20),
           ),
           padding: const EdgeInsets.symmetric(
-            vertical: 16,
+            vertical: 10,
             horizontal: 32,
           ),
         ),
@@ -40,7 +40,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(20),
           ),
           padding: const EdgeInsets.symmetric(
-            vertical: 16,
+            vertical: 10,
             horizontal: 32,
           ),
         ),
@@ -54,7 +54,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(20),
           ),
           padding: const EdgeInsets.symmetric(
-            vertical: 16,
+            vertical: 10,
             horizontal: 32,
           ),
         ),
@@ -72,7 +72,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(20),
           ),
           padding: const EdgeInsets.symmetric(
-            vertical: 16,
+            vertical: 10,
             horizontal: 32,
           ),
         ),
@@ -134,7 +134,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(20),
           ),
           padding: const EdgeInsets.symmetric(
-            vertical: 16,
+            vertical: 10,
             horizontal: 32,
           ),
         ),
@@ -150,7 +150,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(20),
           ),
           padding: const EdgeInsets.symmetric(
-            vertical: 16,
+            vertical: 10,
             horizontal: 32,
           ),
         ),
@@ -170,7 +170,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(20),
           ),
           padding: const EdgeInsets.symmetric(
-            vertical: 16,
+            vertical: 10,
             horizontal: 32,
           ),
         ),
@@ -183,7 +183,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(20),
           ),
           padding: const EdgeInsets.symmetric(
-            vertical: 16,
+            vertical: 10,
             horizontal: 32,
           ),
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../core/route_config/route_names.dart';
 import '../../../core/utils/helper.dart';
@@ -40,19 +41,19 @@ class IntroductionScreen extends StatelessWidget {
                               image: AssetImage(
                                   Helper.introductionMessges[index].image!),
                               height: 200,
-                            ),
+                            ).animate().fadeIn(duration: 500.ms).slide(),
                             const SizedBox(height: 20),
                             Text(
                               Helper.introductionMessges[index].title!,
                               textAlign: TextAlign.center,
                               style: theme.textTheme.headlineLarge,
-                            ),
+                            ).animate().fadeIn(duration: 500.ms).slide(),
                             const SizedBox(height: 20),
                             Text(
                               Helper.introductionMessges[index].subtitle!,
                               textAlign: TextAlign.center,
                               style: theme.textTheme.bodyLarge!,
-                            ),
+                            ).animate().fadeIn(duration: 500.ms).slide(),
                           ],
                         ),
                       );
@@ -84,7 +85,7 @@ class IntroductionScreen extends StatelessWidget {
                           ),
                           count: Helper.introductionMessges.length,
                         ),
-                      ),
+                      ).animate().fadeIn(duration: 500.ms).slide(),
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
@@ -98,7 +99,7 @@ class IntroductionScreen extends StatelessWidget {
                         child: const Text(
                           "Get Started",
                         ),
-                      ),
+                      ).animate().fadeIn(duration: 500.ms).slide(),
                     ],
                   ),
                 ),

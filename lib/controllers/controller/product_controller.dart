@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:commerce_app/core/utils/app_constants.dart';
 import 'package:commerce_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 import 'package:http/http.dart' as http;
@@ -12,7 +13,6 @@ class ProductController extends GetxController {
   final _userCollection = FirebaseFirestore.instance.collection('favorites');
 
   final RxList<Product> products = <Product>[].obs;
-  final RxList<Product> favorites = <Product>[].obs;
   Future<List<Product>> fetchProducts() async {
     try {
       final response = await http.get(
@@ -44,10 +44,7 @@ class ProductController extends GetxController {
       // If a document with the same id exists, handle it accordingly
       if (querySnapshot.docs.isNotEmpty) {
         debugPrint("Product is already added as a favorite.");
-        Get.snackbar(
-          "Failed",
-          "Product is already added as Favorite",
-        );
+        EasyLoading.showError("Product is already added as a favorite.");
       } else {
         // If the product is not already added, proceed with adding it
         await _userCollection
@@ -57,11 +54,11 @@ class ProductController extends GetxController {
 
         // Refresh the favorites stream
         getFavoritesStream();
-
-        Get.snackbar(
-          "Success",
-          "Product added to favorites",
-        );
+        EasyLoading.showSuccess("Product added to favorites");
+        // Get.snackbar(
+        //   "Success",
+        //   "Product added to favorites",
+        // );
       }
     } on FirebaseException catch (e) {
       exceptionError(exception: e);
@@ -102,10 +99,11 @@ class ProductController extends GetxController {
         // Optionally, you can call getFavoritesStream() after deletion
 
         getFavoritesStream();
-        Get.snackbar(
-          "Deleted",
-          "Deleted as Favorite",
-        );
+        EasyLoading.showToast("Remove from favorites");
+        // Get.snackbar(
+        //   "Deleted",
+        //   "Deleted as Favorite",
+        // );
       } else {
         debugPrint("Document not found");
       }

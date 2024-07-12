@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/route_config/route_configuration.dart';
@@ -49,6 +50,7 @@ class EcommerceApp extends StatelessWidget {
 
       /// The routes for the app.
       getPages: AppRoutesConfiguration.routes,
+      builder: EasyLoading.init(),
 
       /// The routes for the app.
       initialRoute: sharedPreferences!.getBool("skipIntro") != true

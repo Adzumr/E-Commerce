@@ -24,6 +24,18 @@ class _ProductsScreenState extends State<ProductsScreen> {
   final productController = Get.find<ProductController>();
 
   fetchData() async {
+    if (productController.products.isEmpty) {
+      setState(() {
+        isLoading = true;
+      });
+      await productController.fetchProducts();
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  refreshData() async {
     setState(() {
       isLoading = true;
     });
@@ -42,7 +54,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
       body: SafeArea(
         child: RefreshIndicator.adaptive(
           onRefresh: () async {
-            await fetchData();
+            await refreshData();
           },
           child: Padding(
             padding: const EdgeInsets.all(25),
@@ -80,8 +92,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                   product: product,
                                   onPressed: () {
                                     productController.addFavorite(
-                                      product: product,
-                                    );
+                                        product: product);
                                   },
                                 ).animate().fadeIn(duration: 500.ms).slide(
                                     begin: index.isEven

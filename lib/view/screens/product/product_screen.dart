@@ -13,11 +13,11 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-  Product? product;
+  Product? _product;
 
   @override
   void initState() {
-    product = Get.arguments;
+    _product = Get.arguments;
     super.initState();
   }
 
@@ -29,113 +29,132 @@ class _ProductScreenState extends State<ProductScreen> {
       appBar: AppBar(
         leading: const BackButton(),
         title: Text(
-          "${product!.title}",
+          "${_product!.title}",
           overflow: TextOverflow.ellipsis,
           style: theme.textTheme.titleMedium,
         ).animate().fadeIn(duration: 500.ms).slide(begin: const Offset(-1, 0)),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Hero(
-                tag: product!.title!,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: CachedNetworkImage(
-                    imageUrl: "${product!.image}",
-                    height: 250,
-                    errorWidget: (context, url, error) {
-                      return const Center(
-                        child: Icon(
-                          Icons.error_outline,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Hero(
+                      tag: _product!.title!,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: CachedNetworkImage(
+                          imageUrl: "${_product!.image}",
+                          height: 250,
+                          errorWidget: (context, url, error) {
+                            return const Center(
+                              child: Icon(
+                                Icons.error_outline,
+                              ),
+                            );
+                          },
+                          placeholder: (context, url) {
+                            return const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            );
+                          },
+                        ).animate().fadeIn(duration: 700.ms).scale(),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ListTile(
+                      title: Text(
+                        "Name",
+                        style: theme.textTheme.titleMedium,
+                      ),
+                      subtitle: Text(
+                        "${_product!.title}".capitalizeFirst!,
+                        style: theme.textTheme.bodyLarge,
+                      ),
+                    )
+                        .animate()
+                        .fadeIn(duration: 500.ms)
+                        .slide(begin: const Offset(-1, 0)),
+                    const SizedBox(height: 20),
+                    ListTile(
+                      title: Text(
+                        "Rating",
+                        style: theme.textTheme.titleMedium,
+                      ),
+                      subtitle: Text(
+                        "${_product!.rating!.rate}",
+                        style: theme.textTheme.bodyLarge!.copyWith(
+                          color: theme.colorScheme.error,
                         ),
-                      );
-                    },
-                    placeholder: (context, url) {
-                      return const Center(
-                        child: CircularProgressIndicator.adaptive(),
-                      );
-                    },
-                  ).animate().fadeIn(duration: 700.ms).scale(),
+                      ),
+                    )
+                        .animate()
+                        .fadeIn(duration: 500.ms)
+                        .slide(begin: const Offset(1, 0)),
+                    const SizedBox(height: 20),
+                    ListTile(
+                      title: Text(
+                        "Category",
+                        style: theme.textTheme.titleMedium,
+                      ),
+                      subtitle: Text(
+                        "${_product!.category}".capitalizeFirst!,
+                        style: theme.textTheme.bodyLarge,
+                      ),
+                    )
+                        .animate()
+                        .fadeIn(duration: 500.ms)
+                        .slide(begin: const Offset(-1, 0)),
+                    const SizedBox(height: 20),
+                    ListTile(
+                      title: Text(
+                        "Description",
+                        style: theme.textTheme.titleMedium,
+                      ),
+                      subtitle: Text(
+                        "${_product!.description}",
+                        style: theme.textTheme.bodyLarge,
+                      ),
+                    )
+                        .animate()
+                        .fadeIn(duration: 500.ms)
+                        .slide(begin: const Offset(1, 0)),
+                    const SizedBox(height: 20),
+                    ListTile(
+                      title: Text(
+                        "Price",
+                        style: theme.textTheme.titleMedium,
+                      ),
+                      subtitle: Text(
+                        "${_product!.price}".toCurrency(),
+                        style: theme.textTheme.bodyLarge,
+                      ),
+                    )
+                        .animate()
+                        .fadeIn(duration: 500.ms)
+                        .slide(begin: const Offset(-1, 0)),
+                  ],
                 ),
               ),
-              const SizedBox(height: 20),
-              ListTile(
-                title: Text(
-                  "Name",
-                  style: theme.textTheme.titleMedium,
-                ),
-                subtitle: Text(
-                  "${product!.title}".capitalizeFirst!,
-                  style: theme.textTheme.bodyLarge,
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: ElevatedButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("Close"),
               )
                   .animate()
                   .fadeIn(duration: 500.ms)
-                  .slide(begin: const Offset(-1, 0)),
-              const SizedBox(height: 20),
-              ListTile(
-                title: Text(
-                  "Rating",
-                  style: theme.textTheme.titleMedium,
-                ),
-                subtitle: Text(
-                  "${product!.rating!.rate}",
-                  style: theme.textTheme.bodyLarge!.copyWith(
-                    color: theme.colorScheme.error,
-                  ),
-                ),
-              )
-                  .animate()
-                  .fadeIn(duration: 500.ms)
-                  .slide(begin: const Offset(1, 0)),
-              const SizedBox(height: 20),
-              ListTile(
-                title: Text(
-                  "Category",
-                  style: theme.textTheme.titleMedium,
-                ),
-                subtitle: Text(
-                  "${product!.category}".capitalizeFirst!,
-                  style: theme.textTheme.bodyLarge,
-                ),
-              )
-                  .animate()
-                  .fadeIn(duration: 500.ms)
-                  .slide(begin: const Offset(-1, 0)),
-              const SizedBox(height: 20),
-              ListTile(
-                title: Text(
-                  "Description",
-                  style: theme.textTheme.titleMedium,
-                ),
-                subtitle: Text(
-                  "${product!.description}",
-                  style: theme.textTheme.bodyLarge,
-                ),
-              )
-                  .animate()
-                  .fadeIn(duration: 500.ms)
-                  .slide(begin: const Offset(1, 0)),
-              const SizedBox(height: 20),
-              ListTile(
-                title: Text(
-                  "Price",
-                  style: theme.textTheme.titleMedium,
-                ),
-                subtitle: Text(
-                  "${product!.price}".toCurrency(),
-                  style: theme.textTheme.bodyLarge,
-                ),
-              )
-                  .animate()
-                  .fadeIn(duration: 500.ms)
-                  .slide(begin: const Offset(-1, 0)),
-            ],
-          ),
+                  .slide(begin: const Offset(-1, 1)),
+            ),
+          ],
         ),
       ),
     );
