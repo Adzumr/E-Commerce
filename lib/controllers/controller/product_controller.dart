@@ -13,13 +13,14 @@ class ProductController extends GetxController {
   final _userCollection = FirebaseFirestore.instance.collection('favorites');
 
   final RxList<Product> products = <Product>[].obs;
+  final RxList<Product> favorites = <Product>[].obs;
+
   Future<List<Product>> fetchProducts() async {
     try {
       final response = await http.get(
         Uri.parse('${AppConstants.baseUrl}/products'),
       );
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        // If the server returns a 200 OK response, parse the products.
         List<dynamic> data = jsonDecode(response.body);
         products.value = data.map((json) => Product.fromJson(json)).toList();
         debugPrint("Products: ${products.length}");
@@ -34,31 +35,22 @@ class ProductController extends GetxController {
 
   Future<void> addFavorite({required Product product}) async {
     try {
-      // Check if the product is already added by querying the "favorites" collection
       QuerySnapshot querySnapshot = await _userCollection
           .doc(firebaseAuth!.currentUser!.uid)
           .collection("favorites")
           .where('id', isEqualTo: product.id)
           .get();
-
-      // If a document with the same id exists, handle it accordingly
       if (querySnapshot.docs.isNotEmpty) {
         debugPrint("Product is already added as a favorite.");
         EasyLoading.showError("Product is already added as a favorite.");
       } else {
-        // If the product is not already added, proceed with adding it
         await _userCollection
             .doc(firebaseAuth!.currentUser!.uid)
             .collection("favorites")
             .add(product.toJson());
 
-        // Refresh the favorites stream
-        getFavoritesStream();
         EasyLoading.showSuccess("Product added to favorites");
-        // Get.snackbar(
-        //   "Success",
-        //   "Product added to favorites",
-        // );
+        favorites.add(product); // Add the product to the favorites list
       }
     } on FirebaseException catch (e) {
       exceptionError(exception: e);
@@ -74,9 +66,9 @@ class ProductController extends GetxController {
       List<Product> products = [];
       for (var documentSnapshot in querySnapshot.docs) {
         Product productModel = Product.fromJson(documentSnapshot.data());
-
         products.add(productModel);
       }
+      favorites.value = products; // Update the favorites list
       return products;
     });
   }
@@ -85,25 +77,16 @@ class ProductController extends GetxController {
     Product? productModel,
   }) async {
     try {
-      // Query to find the document with the specified title
       QuerySnapshot querySnapshot = await _userCollection
           .doc(firebaseAuth!.currentUser!.uid)
           .collection("favorites")
           .where('id', isEqualTo: productModel!.id)
           .get();
-
-      // Check if there is any document matching the query
       if (querySnapshot.docs.isNotEmpty) {
-        // Delete the first document found (assuming titles are unique)
         await querySnapshot.docs.first.reference.delete();
-        // Optionally, you can call getFavoritesStream() after deletion
-
-        getFavoritesStream();
         EasyLoading.showToast("Remove from favorites");
-        // Get.snackbar(
-        //   "Deleted",
-        //   "Deleted as Favorite",
-        // );
+        favorites
+            .remove(productModel); // Remove the product from the favorites list
       } else {
         debugPrint("Document not found");
       }

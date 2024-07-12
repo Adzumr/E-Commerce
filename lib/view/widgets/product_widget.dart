@@ -3,6 +3,7 @@ import 'package:commerce_app/core/utils/extentions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/controller/product_controller.dart';
 import '../../core/route_config/route_names.dart';
 import '../../models/products_model.dart';
 
@@ -10,17 +11,17 @@ class ProducWidget extends StatelessWidget {
   const ProducWidget({
     super.key,
     required this.product,
-    this.isfavorite = false,
     this.onPressed,
   });
 
   final Product product;
-  final bool isfavorite;
   final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final productController = Get.find<ProductController>();
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: InkWell(
@@ -43,11 +44,20 @@ class ProducWidget extends StatelessWidget {
               children: [
                 Align(
                   alignment: Alignment.topRight,
-                  child: IconButton(
-                    onPressed: onPressed,
-                    icon: Icon(
-                      isfavorite ? Icons.favorite : Icons.favorite_outline,
-                      color: theme.colorScheme.error,
+                  child: Obx(
+                    () => IconButton(
+                      onPressed: () async {
+                        productController.favorites.contains(product)
+                            ? productController.removeFavorite(
+                                productModel: product)
+                            : productController.addFavorite(product: product);
+                      },
+                      icon: Icon(
+                        productController.favorites.contains(product)
+                            ? Icons.favorite
+                            : Icons.favorite_outline,
+                        color: theme.colorScheme.error,
+                      ),
                     ),
                   ),
                 ),

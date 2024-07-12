@@ -62,7 +62,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                               itemBuilder: (BuildContext context, int index) {
                                 return ProducWidget(
                                   product: products[index],
-                                  isfavorite: true,
+                                  // isfavorite: true,
                                   onPressed: () {
                                     productController.removeFavorite(
                                       productModel: products[index],

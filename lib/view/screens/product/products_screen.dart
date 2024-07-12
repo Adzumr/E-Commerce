@@ -62,47 +62,48 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 ? const Center(
                     child: CircularProgressIndicator.adaptive(),
                   ).animate().fadeIn(duration: 500.ms).scale()
-                : productController.products.isEmpty
-                    ? Center(
-                        child: Text(
-                          "No Products",
-                          style: theme.textTheme.displaySmall,
-                        )
-                            .animate()
-                            .fadeIn(duration: 500.ms)
-                            .slide(begin: const Offset(0, 1)),
-                      )
-                    : Column(
-                        children: [
-                          Text(
-                            "Products",
-                            textAlign: TextAlign.center,
-                            style: theme.textTheme.titleLarge,
+                : Obx(
+                    () => productController.products.isEmpty
+                        ? Center(
+                            child: Text(
+                              "No Products",
+                              style: theme.textTheme.displaySmall,
+                            ).animate().fadeIn(duration: 500.ms).slide(
+                                  begin: const Offset(0, 1),
+                                ),
                           )
-                              .animate()
-                              .fadeIn(duration: 500.ms)
-                              .slide(begin: const Offset(0, -1)),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: productController.products.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final product =
-                                    productController.products[index];
-                                return ProducWidget(
-                                  product: product,
-                                  onPressed: () {
-                                    productController.addFavorite(
-                                        product: product);
+                        : Column(
+                            children: [
+                              Text(
+                                "Products",
+                                textAlign: TextAlign.center,
+                                style: theme.textTheme.titleLarge,
+                              ).animate().fadeIn(duration: 500.ms).slide(
+                                    begin: const Offset(0, -1),
+                                  ),
+                              Expanded(
+                                child: ListView.builder(
+                                  itemCount: productController.products.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    final product =
+                                        productController.products[index];
+                                    return ProducWidget(
+                                      product: product,
+                                      onPressed: () {
+                                        // productController.addFavorite(
+                                        //     product: product);
+                                      },
+                                    ).animate().fadeIn(duration: 500.ms).slide(
+                                        begin: index.isEven
+                                            ? const Offset(1, 0)
+                                            : const Offset(1, 1));
                                   },
-                                ).animate().fadeIn(duration: 500.ms).slide(
-                                    begin: index.isEven
-                                        ? const Offset(1, 0)
-                                        : const Offset(1, 1));
-                              },
-                            ).animate().fadeIn(duration: 500.ms),
-                          ),
-                        ],
-                      ).animate().fadeIn(duration: 500.ms).saturate(),
+                                ).animate().fadeIn(duration: 500.ms),
+                              ),
+                            ],
+                          ).animate().fadeIn(duration: 500.ms).saturate(),
+                  ),
           ),
         ),
       ),
