@@ -15,15 +15,33 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  bool? isVisible = true;
-  bool? isLoading = false;
+  bool? _isVisible = true;
+  bool? _isLoading = false;
 
-  final authController = Get.find<AuthController>();
+  final _authController = Get.find<AuthController>();
 
-  final formKey = GlobalKey<FormState>();
-  final fullNameController = TextEditingController();
-  final emailAddressController = TextEditingController();
-  final passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  final _nameNode = FocusNode();
+  final _emailNode = FocusNode();
+  final _passwordNode = FocusNode();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _nameNode.dispose();
+    _emailNode.dispose();
+    _passwordNode.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -41,7 +59,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 Expanded(
                   child: SingleChildScrollView(
                     child: Form(
-                      key: formKey,
+                      key: _formKey,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -58,17 +76,21 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           const SizedBox(height: 20),
                           TextFormField(
-                            controller: fullNameController,
+                            controller: _nameController,
+                            focusNode: _nameNode,
                             keyboardType: TextInputType.name,
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (value) {
+                              context.nextFocus(_nameNode, _emailNode);
+                            },
                             validator: (value) {
                               if (value!.trim().isEmpty) {
                                 return "Enter Your name";
                               }
-
                               return null;
                             },
                             decoration: const InputDecoration(
-                              labelText: "Full name",
+                              labelText: "Name",
                               prefixIcon: Icon(
                                 Icons.person_outline,
                               ),
@@ -76,8 +98,13 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
-                            controller: emailAddressController,
+                            controller: _emailController,
+                            focusNode: _emailNode,
+                            textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.emailAddress,
+                            onFieldSubmitted: (value) {
+                              context.nextFocus(_emailNode, _passwordNode);
+                            },
                             validator: (value) {
                               if (value!.trim().isEmpty) {
                                 return "Enter Email Address";
@@ -96,9 +123,15 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
-                            obscureText: isVisible!,
-                            controller: passwordController,
+                            obscureText: _isVisible!,
+                            controller: _passwordController,
+                            focusNode: _passwordNode,
+                            textInputAction: TextInputAction.done,
                             keyboardType: TextInputType.visiblePassword,
+                            onFieldSubmitted: (value) async {
+                              _passwordNode.unfocus();
+                              await _signupFunction();
+                            },
                             validator: (value) {
                               if (value!.trim().isEmpty) {
                                 return "Enter Password";
@@ -113,15 +146,15 @@ class _SignupScreenState extends State<SignupScreen> {
                               suffixIcon: IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    if (isVisible!) {
-                                      isVisible = false;
+                                    if (_isVisible!) {
+                                      _isVisible = false;
                                     } else {
-                                      isVisible = true;
+                                      _isVisible = true;
                                     }
                                   });
                                 },
                                 icon: Icon(
-                                  isVisible!
+                                  _isVisible!
                                       ? Icons.visibility_outlined
                                       : Icons.visibility_off_outlined,
                                   color: theme.colorScheme.primary,
@@ -134,31 +167,14 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                 ),
-                isLoading!
+                _isLoading!
                     ? const Center(
                         child: CircularProgressIndicator.adaptive(),
                       )
                     : ElevatedButton(
                         onPressed: () async {
                           context.dissmissKeyboard();
-                          if (formKey.currentState!.validate()) {
-                            try {
-                              setState(() {
-                                isLoading = true;
-                              });
-                              await authController.registerUser(
-                                customer: UserModel(
-                                  email: emailAddressController.text.trim(),
-                                  name: fullNameController.text.trim(),
-                                ),
-                                password: passwordController.text.trim(),
-                              );
-                            } finally {
-                              setState(() {
-                                isLoading = false;
-                              });
-                            }
-                          }
+                          await _signupFunction();
                         },
                         child: const Text(
                           "Sign Up",
@@ -193,5 +209,26 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _signupFunction() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        setState(() {
+          _isLoading = true;
+        });
+        await _authController.registerUser(
+          customer: UserModel(
+            email: _emailController.text.trim(),
+            name: _nameController.text.trim(),
+          ),
+          password: _passwordController.text.trim(),
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 }

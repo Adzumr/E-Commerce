@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../../../controllers/controller/auth_controller.dart';
 import '../../../main.dart';
 
@@ -53,11 +54,11 @@ class AccountScreen extends StatelessWidget {
                               title: Text(
                                 "Log out",
                                 style: theme.textTheme.titleLarge,
-                              ),
+                              ).animate().fadeIn(duration: 500.ms),
                               content: Text(
                                 "Are you sure?",
                                 style: theme.textTheme.bodyLarge,
-                              ),
+                              ).animate().fadeIn(duration: 500.ms),
                               actionsAlignment: MainAxisAlignment.end,
                               actions: [
                                 ElevatedButton(
@@ -65,22 +66,20 @@ class AccountScreen extends StatelessWidget {
                                     await authController.signOut();
                                   },
                                   child: const Text("Yes"),
-                                ),
+                                ).animate().fadeIn(duration: 500.ms),
                                 TextButton(
                                   onPressed: () {
                                     Get.back();
                                   },
-                                  child: const Text(
-                                    "No",
-                                  ),
-                                )
+                                  child: const Text("No"),
+                                ).animate().fadeIn(duration: 500.ms),
                               ],
-                            );
+                            ).animate().fadeIn(duration: 300.ms).scale();
                           },
                         );
                       },
                     ),
-                  ],
+                  ].animate().fadeIn(duration: 500.ms).scale(),
                 ),
               ],
             ),
@@ -116,7 +115,7 @@ class OptionTile extends StatelessWidget {
           size: 20,
         ),
       ),
-    );
+    ).animate().fadeIn(duration: 500.ms).slide(begin: const Offset(1, 0));
   }
 }
 
@@ -152,19 +151,19 @@ class _ProfileHeadState extends State<ProfileHead> {
             placeholder: (context, url) => const Center(
               child: CircularProgressIndicator.adaptive(),
             ),
-          ),
+          ).animate().fadeIn(duration: 700.ms).scale(),
         ),
         const SizedBox(height: 16),
         Text(
           "${firebaseAuth?.currentUser?.email}",
           textAlign: TextAlign.center,
           style: theme.textTheme.titleMedium,
-        ),
+        ).animate().fadeIn(duration: 500.ms).slide(begin: const Offset(-1, 0)),
         Text(
           "${firebaseAuth?.currentUser?.displayName}",
           textAlign: TextAlign.center,
           style: theme.textTheme.bodyMedium,
-        ),
+        ).animate().fadeIn(duration: 500.ms).slide(begin: const Offset(1, 0)),
         IconButton(
           onPressed: () async {
             ValueNotifier isLoading = ValueNotifier<bool>(false);
@@ -178,7 +177,7 @@ class _ProfileHeadState extends State<ProfileHead> {
                   title: Text(
                     "Update Name",
                     style: theme.textTheme.titleLarge,
-                  ),
+                  ).animate().fadeIn(duration: 500.ms),
                   content: Form(
                     key: formKey,
                     child: TextFormField(
@@ -189,7 +188,7 @@ class _ProfileHeadState extends State<ProfileHead> {
                         }
                         return null;
                       },
-                    ),
+                    ).animate().fadeIn(duration: 500.ms),
                   ),
                   actions: [
                     ValueListenableBuilder(
@@ -215,19 +214,19 @@ class _ProfileHeadState extends State<ProfileHead> {
                                   }
                                 },
                                 child: const Text("Update"),
-                              );
+                              ).animate().fadeIn(duration: 500.ms);
                       },
                     ),
                   ],
-                );
+                ).animate().fadeIn(duration: 300.ms).scale();
               },
             );
           },
           icon: const Icon(
             Icons.edit,
           ),
-        )
+        ).animate().fadeIn(duration: 500.ms).scale(),
       ],
-    );
+    ).animate().fadeIn(duration: 500.ms).scaleY();
   }
 }

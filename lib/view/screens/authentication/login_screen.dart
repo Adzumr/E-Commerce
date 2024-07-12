@@ -13,14 +13,26 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool? isVisible = true;
-  bool? isLoading = false;
+  bool? _isVisible = true;
+  bool? _isLoading = false;
 
-  final authController = Get.find<AuthController>();
+  final _authController = Get.find<AuthController>();
 
-  final formKey = GlobalKey<FormState>();
-  final emailAddressController = TextEditingController();
-  final passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  final _emailNode = FocusNode();
+  final _passwordNode = FocusNode();
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _emailNode.dispose();
+    _passwordNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -37,28 +49,30 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 Expanded(
                   child: Form(
-                    key: formKey,
+                    key: _formKey,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          // const AppLogo(),
-                          const SizedBox(height: 48),
-                          ListTile(
-                            title: Text(
-                              "Welcome Back",
-                              style: theme.textTheme.titleLarge,
-                            ),
-                            subtitle: Text(
-                              "Log in to your account to continue exploring our marketplace.",
-                              style: theme.textTheme.bodyLarge,
-                            ),
+                          Text(
+                            "Welcome Back",
+                            style: theme.textTheme.titleLarge,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            "Log in to your account to continue exploring our marketplace.",
+                            style: theme.textTheme.bodyLarge,
                           ),
                           const SizedBox(height: 20),
                           TextFormField(
-                            controller: emailAddressController,
+                            controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
+                            focusNode: _emailNode,
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (value) {
+                              context.nextFocus(_emailNode, _passwordNode);
+                            },
                             validator: (value) {
                               if (value!.trim().isEmpty) {
                                 return "Enter Email Address";
@@ -77,9 +91,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
-                            obscureText: isVisible!,
-                            controller: passwordController,
+                            obscureText: _isVisible!,
+                            controller: _passwordController,
+                            focusNode: _passwordNode,
+                            textInputAction: TextInputAction.done,
                             keyboardType: TextInputType.visiblePassword,
+                            onFieldSubmitted: (value) async {
+                              _passwordNode.unfocus();
+                              await _loginFunction();
+                            },
                             validator: (value) {
                               if (value!.trim().isEmpty) {
                                 return "Enter Password";
@@ -94,15 +114,15 @@ class _LoginScreenState extends State<LoginScreen> {
                               suffixIcon: IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    if (isVisible!) {
-                                      isVisible = false;
+                                    if (_isVisible!) {
+                                      _isVisible = false;
                                     } else {
-                                      isVisible = true;
+                                      _isVisible = true;
                                     }
                                   });
                                 },
                                 icon: Icon(
-                                  isVisible!
+                                  _isVisible!
                                       ? Icons.visibility_outlined
                                       : Icons.visibility_off_outlined,
                                   color: theme.colorScheme.primary,
@@ -129,28 +149,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                isLoading!
+                _isLoading!
                     ? const Center(
                         child: CircularProgressIndicator.adaptive(),
                       )
                     : ElevatedButton(
                         onPressed: () async {
                           context.dissmissKeyboard();
-                          if (formKey.currentState!.validate()) {
-                            try {
-                              setState(() {
-                                isLoading = true;
-                              });
-                              await authController.loginUser(
-                                email: emailAddressController.text.trim(),
-                                password: passwordController.text.trim(),
-                              );
-                            } finally {
-                              setState(() {
-                                isLoading = false;
-                              });
-                            }
-                          }
+                          await _loginFunction();
                         },
                         child: const Text(
                           "Log in",
@@ -185,5 +191,23 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _loginFunction() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        setState(() {
+          _isLoading = true;
+        });
+        await _authController.loginUser(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 }

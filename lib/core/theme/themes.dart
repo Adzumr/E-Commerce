@@ -12,10 +12,10 @@ class AppTheme {
         color: AppColor.secondary,
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColor.primary,
+        backgroundColor: AppColor.surface,
         centerTitle: true,
         iconTheme: IconThemeData(
-          color: AppColor.onPrimary,
+          color: AppColor.onSurface,
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(

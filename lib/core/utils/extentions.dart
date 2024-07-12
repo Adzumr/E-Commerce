@@ -7,6 +7,11 @@ extension ContextExtensions on BuildContext {
   void dissmissKeyboard() {
     FocusScope.of(this).unfocus();
   }
+
+  void nextFocus(FocusNode currentFocus, FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(this).requestFocus(nextFocus);
+  }
 }
 
 extension DateTimeExtentions on DateTime {
