@@ -29,6 +29,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
         isLoading = true;
       });
       await productController.fetchProducts();
+      productController.getFavoritesStream();
       setState(() {
         isLoading = false;
       });
@@ -40,6 +41,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
       isLoading = true;
     });
     await productController.fetchProducts();
+    productController.getFavoritesStream();
     setState(() {
       isLoading = false;
     });
@@ -82,24 +84,34 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                     begin: const Offset(0, -1),
                                   ),
                               Expanded(
-                                child: ListView.builder(
-                                  itemCount: productController.products.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    final product =
-                                        productController.products[index];
-                                    return ProducWidget(
-                                      product: product,
-                                      onPressed: () {
-                                        // productController.addFavorite(
-                                        //     product: product);
-                                      },
-                                    ).animate().fadeIn(duration: 500.ms).slide(
-                                        begin: index.isEven
-                                            ? const Offset(1, 0)
-                                            : const Offset(1, 1));
-                                  },
-                                ).animate().fadeIn(duration: 500.ms),
+                                child: Obx(
+                                  () => ListView.builder(
+                                    itemCount:
+                                        productController.products.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      final product =
+                                          productController.products[index];
+                                      final isSelected = productController
+                                          .favorites
+                                          .any((cat) => cat.id == product.id);
+                                      return ProducWidget(
+                                        product: product,
+                                        isFavorite: isSelected,
+                                        // onPressed: () {
+                                        //   // productController.addFavorite(
+                                        //   //     product: product);
+                                        // },
+                                      )
+                                          .animate()
+                                          .fadeIn(duration: 500.ms)
+                                          .slide(
+                                              begin: index.isEven
+                                                  ? const Offset(1, 0)
+                                                  : const Offset(1, 1));
+                                    },
+                                  ).animate().fadeIn(duration: 500.ms),
+                                ),
                               ),
                             ],
                           ).animate().fadeIn(duration: 500.ms).saturate(),

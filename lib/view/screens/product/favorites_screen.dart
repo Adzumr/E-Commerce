@@ -61,13 +61,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                               itemCount: products.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return ProducWidget(
+                                  isFavorite: true,
                                   product: products[index],
-                                  // isfavorite: true,
-                                  onPressed: () {
-                                    productController.removeFavorite(
-                                      productModel: products[index],
-                                    );
-                                  },
+                                  // onPressed: () {
+                                  //   productController.removeFavorite(
+                                  //     productModel: products[index],
+                                  //   );
+                                  // },
                                 ).animate().fadeIn(duration: 500.ms).slide(
                                       begin: index.isEven
                                           ? const Offset(1, 0)

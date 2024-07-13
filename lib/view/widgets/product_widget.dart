@@ -7,15 +7,24 @@ import '../../controllers/controller/product_controller.dart';
 import '../../core/route_config/route_names.dart';
 import '../../models/products_model.dart';
 
+/// Widget for displaying a product item.
 class ProducWidget extends StatelessWidget {
+  /// Constructs a `ProducWidget`.
+  ///
+  /// Parameters:
+  /// - `product`: The product to display.
+  /// - `onPressed`: Callback function when the product is pressed.
   const ProducWidget({
     super.key,
     required this.product,
-    this.onPressed,
+    required this.isFavorite,
   });
 
+  /// The product to display.
   final Product product;
-  final VoidCallback? onPressed;
+
+  /// The product to display.
+  final bool isFavorite;
 
   @override
   Widget build(BuildContext context) {

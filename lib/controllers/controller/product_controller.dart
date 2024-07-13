@@ -9,12 +9,19 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../models/products_model.dart';
 
+/// Controller responsible for managing products and favorites.
 class ProductController extends GetxController {
   final _userCollection = FirebaseFirestore.instance.collection('favorites');
 
+  /// Observable list of all products.
   final RxList<Product> products = <Product>[].obs;
+
+  /// Observable list of favorite products.
   final RxList<Product> favorites = <Product>[].obs;
 
+  /// Fetches products from the API and updates the [products] list.
+  ///
+  /// Returns a list of fetched products.
   Future<List<Product>> fetchProducts() async {
     try {
       final response = await http.get(
@@ -33,6 +40,10 @@ class ProductController extends GetxController {
     }
   }
 
+  /// Adds a product to the user's favorites collection in Firestore.
+  ///
+  /// Parameters:
+  /// - `product`: The product to be added to favorites.
   Future<void> addFavorite({required Product product}) async {
     try {
       QuerySnapshot querySnapshot = await _userCollection
@@ -49,14 +60,17 @@ class ProductController extends GetxController {
             .collection("favorites")
             .add(product.toJson());
 
-        EasyLoading.showSuccess("Product added to favorites");
         favorites.add(product); // Add the product to the favorites list
+        EasyLoading.showSuccess("Product added to favorites");
       }
     } on FirebaseException catch (e) {
-      exceptionError(exception: e);
+      EasyLoading.showError("$e");
     }
   }
 
+  /// Retrieves a stream of favorite products from Firestore.
+  ///
+  /// Returns a stream of lists of favorite products.
   Stream<List<Product>> getFavoritesStream() {
     return _userCollection
         .doc(firebaseAuth!.currentUser!.uid)
@@ -67,14 +81,19 @@ class ProductController extends GetxController {
       for (var documentSnapshot in querySnapshot.docs) {
         Product productModel = Product.fromJson(documentSnapshot.data());
         products.add(productModel);
+        favorites.add(productModel);
       }
-      favorites.value = products; // Update the favorites list
+      // favorites.value = products; // Update the favorites list
       return products;
     });
   }
 
-  Future removeFavorite({
-    Product? productModel,
+  /// Removes a product from the user's favorites collection in Firestore.
+  ///
+  /// Parameters:
+  /// - `productModel`: The product model to be removed from favorites.
+  Future<void> removeFavorite({
+    required Product? productModel,
   }) async {
     try {
       QuerySnapshot querySnapshot = await _userCollection
@@ -84,26 +103,14 @@ class ProductController extends GetxController {
           .get();
       if (querySnapshot.docs.isNotEmpty) {
         await querySnapshot.docs.first.reference.delete();
-        EasyLoading.showToast("Remove from favorites");
         favorites
             .remove(productModel); // Remove the product from the favorites list
+        EasyLoading.showToast("Remove from favorites");
       } else {
         debugPrint("Document not found");
       }
     } on FirebaseException catch (e) {
-      exceptionError(
-        exception: e,
-      );
+      EasyLoading.showError("$e");
     }
-  }
-
-  void exceptionError({
-    FirebaseException? exception,
-  }) {
-    Get.snackbar(
-      "Something went wrong",
-      exception!.code,
-    );
-    throw Exception(exception.message);
   }
 }

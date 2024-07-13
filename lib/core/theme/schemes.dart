@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'colors.dart';
 
+/// Singleton class for managing application color schemes.
 class AppColorScheme {
   static AppColorScheme? _instance;
 
@@ -11,6 +12,8 @@ class AppColorScheme {
   }
 
   AppColorScheme._(); // Private constructor
+
+  /// Light color scheme for the application.
   static ColorScheme lightColorScheme = ColorScheme(
     brightness: Brightness.light,
     primary: AppColor.primary,
@@ -24,6 +27,8 @@ class AppColorScheme {
     tertiary: AppColor.tertiary,
     onTertiary: AppColor.onTertiary,
   );
+
+  /// Dark color scheme for the application.
   static ColorScheme darkColorScheme = ColorScheme(
     brightness: Brightness.dark,
     primary: AppColor.darkPrimary,

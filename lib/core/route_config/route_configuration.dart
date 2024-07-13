@@ -14,7 +14,9 @@ import '../../view/screens/authentication/signup_screen.dart';
 import 'route_names.dart';
 
 class AppRoutesConfiguration {
+  /// List of routes for the application using GetX's [GetPage].
   static List<GetPage> routes = [
+    /// Introduction Screen route.
     GetPage(
       fullscreenDialog: true,
       participatesInRootNavigator: true,
@@ -23,6 +25,8 @@ class AppRoutesConfiguration {
       binding: AuthBinding(),
       page: () => const IntroductionScreen(),
     ),
+
+    /// Login Screen route.
     GetPage(
       fullscreenDialog: true,
       participatesInRootNavigator: true,
@@ -31,6 +35,8 @@ class AppRoutesConfiguration {
       binding: AuthBinding(),
       page: () => const LoginScreen(),
     ),
+
+    /// Signup Screen route.
     GetPage(
       fullscreenDialog: true,
       participatesInRootNavigator: true,
@@ -39,6 +45,8 @@ class AppRoutesConfiguration {
       binding: AuthBinding(),
       page: () => const SignupScreen(),
     ),
+
+    /// Home Screen route.
     GetPage(
       fullscreenDialog: true,
       participatesInRootNavigator: true,
@@ -50,6 +58,8 @@ class AppRoutesConfiguration {
       ],
       page: () => const MainScreen(),
     ),
+
+    /// Products Screen route.
     GetPage(
       fullscreenDialog: true,
       participatesInRootNavigator: true,
@@ -61,6 +71,8 @@ class AppRoutesConfiguration {
       ],
       page: () => const ProductsScreen(),
     ),
+
+    /// Product Screen route.
     GetPage(
       fullscreenDialog: true,
       participatesInRootNavigator: true,
@@ -72,6 +84,8 @@ class AppRoutesConfiguration {
       ],
       page: () => const ProductScreen(),
     ),
+
+    /// Favorites Screen route.
     GetPage(
       fullscreenDialog: true,
       participatesInRootNavigator: true,
@@ -83,6 +97,8 @@ class AppRoutesConfiguration {
       ],
       page: () => const FavoritesScreen(),
     ),
+
+    /// Profile Screen route.
     GetPage(
       fullscreenDialog: true,
       participatesInRootNavigator: true,
@@ -94,6 +110,8 @@ class AppRoutesConfiguration {
       ],
       page: () => const ProfileScreen(),
     ),
+
+    /// Account Screen route.
     GetPage(
       fullscreenDialog: true,
       participatesInRootNavigator: true,

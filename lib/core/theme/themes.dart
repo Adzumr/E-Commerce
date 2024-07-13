@@ -4,7 +4,18 @@ import 'colors.dart';
 import 'fonts.dart';
 import 'schemes.dart';
 
+/// Singleton class for managing application themes.
 class AppTheme {
+  static AppTheme? _instance;
+
+  factory AppTheme() {
+    _instance ??= AppTheme._(); // Create instance if it doesn't exist
+    return _instance!;
+  }
+
+  AppTheme._(); // Private constructor
+
+  /// Returns the light theme data for the application.
   static ThemeData get lightTheme {
     return ThemeData(
       colorScheme: AppColorScheme.lightColorScheme,
@@ -110,6 +121,7 @@ class AppTheme {
     );
   }
 
+  /// Returns the dark theme data for the application.
   static ThemeData get darkTheme {
     return ThemeData(
       colorScheme: AppColorScheme.darkColorScheme,
